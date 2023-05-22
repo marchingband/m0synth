@@ -36,6 +36,11 @@ int get_voice_by_note(uint8_t note){
     return -1;
 }
 
+float note_to_freq(int note) {
+    float a = 440; //frequency of A (coomon value is 440Hz)
+    return (a / 32) * pow(2, ((note - 9) / 12.0));
+}
+
 mydsp dsp;
 
 float *buf[1];
@@ -94,11 +99,6 @@ void stop(uint8_t note){
         return
     voices[ret].on = false;
     *voices[ret].gate = 0.0f;
-}
-
-float note_to_freq(int note) {
-    float a = 440; //frequency of A (coomon value is 440Hz)
-    return (a / 32) * pow(2, ((note - 9) / 12.0));
 }
 
 // void set_note(uint8_t note){
