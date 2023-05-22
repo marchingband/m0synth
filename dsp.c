@@ -109,13 +109,13 @@ void dsp_init(size_t buf_size){
 
     voices[6].on = false;
     voices[6].note = 0;
-    voices[6].pitch = &dsp.fHslider6;
+    voices[6].pitch = &dsp.fHslider8;
     voices[6].gain = &dsp.fVbargraph6;
     voices[6].gate = &dsp.fButton6;
 
     voices[7].on = false;
     voices[7].note = 0;
-    voices[7].pitch = &dsp.fHslider7;
+    voices[7].pitch = &dsp.fHslider9;
     voices[7].gain = &dsp.fVbargraph7;
     voices[7].gate = &dsp.fButton7;
 
