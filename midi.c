@@ -28,6 +28,7 @@ void set_note(uint8_t note);
 void set_filter(uint8_t val);
 
 static struct bflb_device_s *uart0;
+int ch;
 
 void handle_midi(uint8_t *msg, uint8_t len)
 {
@@ -100,14 +101,24 @@ static void uart_receive_isr(int irq, void *arg)
     }
 }
 
+void poll_uart( void ){
+    ch = bflb_uart_getchar(uart0);
+    if (ch != -1) {
+        int ret = parse(ch);
+        if(ret){
+            handle_midi(getMidiMsg(), getMidiMsgLen());
+        }
+    }
+}
+
 void uart_receive_init(void){
 
     init_midi_parser();
 
     uart0 = bflb_device_get_by_name("uart0");
-    bflb_uart_feature_control(uart0, UART_CMD_SET_RX_FIFO_THREHOLD, 0);
+    // bflb_uart_feature_control(uart0, UART_CMD_SET_RX_FIFO_THREHOLD, 0);
   
-    bflb_irq_attach(uart0->irq_num, uart_receive_isr, uart0);
-    bflb_irq_enable(uart0->irq_num);
-    bflb_uart_rxint_mask(uart0, false);
+    // bflb_irq_attach(uart0->irq_num, uart_receive_isr, uart0);
+    // bflb_irq_enable(uart0->irq_num);
+    // bflb_uart_rxint_mask(uart0, false);
 }
