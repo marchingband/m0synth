@@ -73,37 +73,37 @@ void dsp_init(size_t buf_size){
 
     voices[0].on = false;
     voices[0].note = 0;
-    voices[0].pitch = &dsp.fHslider0;
+    voices[0].pitch = &dsp.fHslider2;
     voices[0].gain = &dsp.fVbargraph0;
     voices[0].gate = &dsp.fButton0;
 
     voices[1].on = false;
     voices[1].note = 0;
-    voices[1].pitch = &dsp.fHslider1;
+    voices[1].pitch = &dsp.fHslider3;
     voices[1].gain = &dsp.fVbargraph1;
     voices[1].gate = &dsp.fButton1;
 
     voices[2].on = false;
     voices[2].note = 0;
-    voices[2].pitch = &dsp.fHslider2;
+    voices[2].pitch = &dsp.fHslider4;
     voices[2].gain = &dsp.fVbargraph2;
     voices[2].gate = &dsp.fButton2;
 
     voices[3].on = false;
     voices[3].note = 0;
-    voices[3].pitch = &dsp.fHslider3;
+    voices[3].pitch = &dsp.fHslider5;
     voices[3].gain = &dsp.fVbargraph3;
     voices[3].gate = &dsp.fButton3;
 
     voices[4].on = false;
     voices[4].note = 0;
-    voices[4].pitch = &dsp.fHslider4;
+    voices[4].pitch = &dsp.fHslider6;
     voices[4].gain = &dsp.fVbargraph4;
     voices[4].gate = &dsp.fButton4;
 
     voices[5].on = false;
     voices[5].note = 0;
-    voices[5].pitch = &dsp.fHslider5;
+    voices[5].pitch = &dsp.fHslider7;
     voices[5].gain = &dsp.fVbargraph5;
     voices[5].gate = &dsp.fButton5;
 
@@ -170,13 +170,13 @@ void stop(uint8_t note){
 // }
 
 void set_filter1(uint8_t val){
-    // float freq = (float)val / 127.0f; // 0 ~ 1
-    // dsp.fHslider0 = freq;
+    float freq = (float)val / 127.0f; // 0 ~ 1
+    dsp.fHslider0 = freq;
 }
 
 void set_filter2(uint8_t val){
-    // float freq = ((float)val / 127.0f) * 2000; // 0 ~ 2000
-    // dsp.fHslider1 = freq;
+    float freq = ((float)val / 127.0f) * 2000; // 0 ~ 2000
+    dsp.fHslider1 = freq;
 }
 
 void set_filter3(uint8_t val){
