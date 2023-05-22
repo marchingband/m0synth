@@ -24,11 +24,11 @@ int get_next_voice( void ){
         if(voices[i].on == false)
         // if((!voices[i].on) || (*voices[i].gain == 0.0f))
         {
-            printf("next voice is %d", i);
+            printf("next voice is %d\n", i);
             return i;
         }
     }
-    printf("no freee voices");
+    printf("no freee voices\n");
     return -1;
 }
 
@@ -37,11 +37,11 @@ int get_voice_by_note(uint8_t note){
     {
         if( voices[i].note == note)
         {
-            printf("%d, found voice is %d", note, i);
+            printf("%d, found voice is %d\n", note, i);
             return i;
         }
     }
-    printf("no voices for that note");
+    printf("no voices for that note\n");
     return -1;
 }
 
