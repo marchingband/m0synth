@@ -19,7 +19,15 @@ struct voice_s {
 
 struct voice_s voices[NUM_VOICES];
 
-int get_next_voice( void ){
+int get_next_voice( uint8_t note ){
+    for(int i = 0 ; i < NUM_VOICES; i++)
+    {
+        if(voices[i].note == note) // retrigger
+        {
+            return i;
+        }
+    }
+
     for(int i = 0 ; i < NUM_VOICES; i++)
     {
         if((voices[i].on == false) && (*voices[i].gain == 0.0f)) // completely open
@@ -152,7 +160,7 @@ void dsp_run(int16_t *dest){
 }
 
 void play(uint8_t note){
-    int ret = get_next_voice();
+    int ret = get_next_voice(note);
     if(ret == -1){
         return;
     }
