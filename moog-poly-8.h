@@ -639,7 +639,7 @@ void instanceClearmydsp(mydsp* dsp) {
 void instanceConstantsmydsp(mydsp* dsp, int sample_rate) {
 	dsp->fSampleRate = sample_rate;
 	float fConst0 = fminf(1.92e+05f, fmaxf(1.0f, (float)(dsp->fSampleRate)));
-	dsp->fConst1 = 0.03f * fConst0;
+	dsp->fConst1 = 0.25f * fConst0;
 	dsp->fConst2 = 1.0f / fConst0;
 	dsp->fConst3 = 44.1f / fConst0;
 	dsp->fConst4 = 1.0f - dsp->fConst3;
