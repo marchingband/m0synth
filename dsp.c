@@ -155,13 +155,12 @@ void play(uint8_t note){
 }
 
 void stop(uint8_t note){
-    int ret = get_voice_by_note(note);
-    if(ret == -1 ){
-        return;
+    for(int i=0; i<NUM_VOICES; i++){
+        if(voices[i].note == note){
+            voices[i].on = false;
+            *voices[i].gate = 0.0f;
+        }
     }
-    // printf("stopping %d on voice %d\n", note, ret);
-    voices[ret].on = false;
-    *voices[ret].gate = 0.0f;
 }
 
 // void set_note(uint8_t note){
