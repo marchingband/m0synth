@@ -284,7 +284,7 @@ int main(void)
     /* midi */
     uart_receive_init();
 
-    csi_vic_set_prio(BL616_IRQ_AUDAC, 1);
+    csi_vic_set_prio(BL616_IRQ_UART0, 1);
 
     int32_t uart_int_num = BL616_IRQ_UART0;
     int32_t audac_int_num = BL616_IRQ_AUDAC;
