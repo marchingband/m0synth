@@ -148,7 +148,7 @@ void play(uint8_t note){
         return;
     }
     float hz = note_to_freq(note);
-    printf("playing %d:%d on voice %d\n", note, hz, ret);
+    printf("playing %d:%f on voice %d\n", note, hz, ret);
     voices[ret].on = true;
     voices[ret].note = note;
     *voices[ret].pitch = hz;
