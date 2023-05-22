@@ -21,9 +21,14 @@ struct voice_s voices[NUM_VOICES];
 int get_next_voice( void ){
     for(int i = 0 ; i < NUM_VOICES; i++)
     {
-        if((!voices[i].on) || (*voices[i].gain == 0.0f))
+        if(voices[i].on == false)
+        // if((!voices[i].on) || (*voices[i].gain == 0.0f))
+        {
+            printf("next voice is %d", i);
             return i;
+        }
     }
+    printf("no freee voices");
     return -1;
 }
 
@@ -31,8 +36,12 @@ int get_voice_by_note(uint8_t note){
     for(int i = 0 ; i < NUM_VOICES; i++)
     {
         if( voices[i].note == note)
+        {
+            printf("%d, found voice is %d", note, i);
             return i;
+        }
     }
+    printf("no voices for that note");
     return -1;
 }
 
