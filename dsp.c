@@ -72,9 +72,9 @@ void dsp_init(size_t buf_size){
 
     dsp.fHslider0 = 1.0f; // resonance
     dsp.fHslider1 = 2000.0f; // cuttof frequency
-    dsp.fButton0 = 1.0f; 
-    dsp.fButton1 = 1.0f;
-    dsp.fButton2 = 1.0f;
+    // dsp.fButton0 = 1.0f; 
+    // dsp.fButton1 = 1.0f;
+    // dsp.fButton2 = 1.0f;
 }
 
 void dsp_run(int16_t *dest){
