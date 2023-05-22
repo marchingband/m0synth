@@ -101,8 +101,10 @@ void dsp_run(int16_t *dest){
 
 void play(uint8_t note){
     int ret = get_next_voice();
-    if(ret == -1)
+    if(ret == -1){
         return;
+    }
+    printf("playing %d on voice %d\n", note, ret);
     voices[ret].on = true;
     voices[ret].note = note;
     *voices[ret].pitch = note_to_freq(note);
@@ -111,8 +113,10 @@ void play(uint8_t note){
 
 void stop(uint8_t note){
     int ret = get_voice_by_note(note);
-    if(ret == -1 )
+    if(ret == -1 ){
         return;
+    }
+    printf("stopping %d on voice %d\n", note, ret);
     voices[ret].on = false;
     *voices[ret].gate = 0.0f;
 }
