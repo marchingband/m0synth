@@ -119,8 +119,8 @@ void dsp_init(size_t buf_size){
     voices[7].gain = &dsp.fVbargraph7;
     voices[7].gate = &dsp.fButton7;
 
-    dsp.fHslider8 = 1.0f; // resonance
-    dsp.fHslider9 = 2000.0f; // cuttof frequency
+    // dsp.fHslider8 = 1.0f; // resonance
+    // dsp.fHslider9 = 2000.0f; // cuttof frequency
 
     // dsp.fButton0 = 1.0f; 
     // dsp.fButton1 = 1.0f;
@@ -170,13 +170,13 @@ void stop(uint8_t note){
 // }
 
 void set_filter1(uint8_t val){
-    float freq = (float)val / 127.0f; // 0 ~ 1
-    dsp.fHslider0 = freq;
+    // float freq = (float)val / 127.0f; // 0 ~ 1
+    // dsp.fHslider0 = freq;
 }
 
 void set_filter2(uint8_t val){
-    float freq = ((float)val / 127.0f) * 2000; // 0 ~ 2000
-    dsp.fHslider1 = freq;
+    // float freq = ((float)val / 127.0f) * 2000; // 0 ~ 2000
+    // dsp.fHslider1 = freq;
 }
 
 void set_filter3(uint8_t val){
