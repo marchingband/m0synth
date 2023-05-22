@@ -282,9 +282,9 @@ int main(void)
     uart_receive_init();
 
     while (1) {
-        uint64_t start = bflb_mtimer_get_time_us();
+        // uint64_t start = bflb_mtimer_get_time_us();
         bflb_mtimer_delay_ms(1000);
-        printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
+        // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
     }
