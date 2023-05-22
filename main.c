@@ -21,7 +21,7 @@ void dsp_init(size_t buf_size);
 void uart_receive_init(void);
 
 void test(void);
-
+void print_bench(void);
 
 static int min (int a, int b)
 {
@@ -296,9 +296,13 @@ int main(void)
 
     // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
     // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
-
+    int cnt = 0;
     while (1) {
         // uint64_t start = bflb_mtimer_get_time_us();
+        if(cnt++ > 100000){
+            cnt = 0;
+            print_bench();
+        }
         poll_uart();
         // bflb_mtimer_delay_ms(1000);
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));

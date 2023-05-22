@@ -147,7 +147,18 @@ void dsp_init(size_t buf_size){
     // dsp.fButton5 = 1.0f;
 }
 
+int start = 0;
+int end = 0;
+int period = 0;
+
+void print_bench(void){
+    printf("%d of %d us\n", end - start, period);
+}
+
 void dsp_run(int16_t *dest){
+    int now = bflb_mtimer_get_time_us();
+    period = now - start;
+    start = now;
     computemydsp(&dsp, buf_len, NULL, buf);
     for(int i=0;i<buf_len;i++){
         float val = buf[0][i];
@@ -157,6 +168,7 @@ void dsp_run(int16_t *dest){
         dest[ index ] = u16;
         dest[ index + 1 ] = u16;
     }
+    end = bflb_mtimer_get_time_us();
 }
 
 void play(uint8_t note){
