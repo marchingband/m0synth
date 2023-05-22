@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+
+#include "bflb_mtimer.h"
+
 // #include "square-diode-lfo.h"
 // #include "square-diode.h"
 #include "moog-poly-8.h"
