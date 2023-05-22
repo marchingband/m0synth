@@ -113,16 +113,16 @@ void stop(uint8_t note){
 // }
 
 void set_filter1(uint8_t val){
-    float freq = ((float)val / 127.0f) * 0.8;
+    float freq = (float)val / 127.0f; // 0 ~ 1
     dsp.fHslider0 = freq;
 }
 
 void set_filter2(uint8_t val){
-    float freq = ((float)val / 127.0f) * 0.1;
+    float freq = ((float)val / 127.0f) * 2000; // 0 ~ 2000
     dsp.fHslider1 = freq;
 }
 
 void set_filter3(uint8_t val){
-    float freq = ((float)val / 127.0f) * 40;
-    dsp.fHslider2 = freq;
+    // float freq = ((float)val / 127.0f) * 40;
+    // dsp.fHslider2 = freq;
 }
