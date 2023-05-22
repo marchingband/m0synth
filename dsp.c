@@ -4,7 +4,7 @@
 #include <stdlib.h>
 // #include "square-diode-lfo.h"
 // #include "square-diode.h"
-#include "diode_filter.h"
+#include "moog-poly-3.h"
 
 #define NUM_VOICES 3
 
@@ -49,20 +49,20 @@ void dsp_init(size_t buf_size){
 
     voices[0].on = false;
     voices[0].note = 0;
-    voices[0].pitch = fHslider0;
-    voices[0].gain = &dsp.fHslider1;
+    voices[0].pitch = &dsp.fHslider2;
+    voices[0].gain = &dsp.fVbargraph0;
     voices[0].gate = &dsp.fButton0;
 
     voices[1].on = false;
     voices[1].note = 0;
-    voices[1].pitch = fHslider1;
-    voices[1].gain = &dsp.fHslider3;
+    voices[1].pitch = &dsp.fHslider3;
+    voices[1].gain = &dsp.fVbargraph1;
     voices[1].gate = &dsp.fButton1;
 
     voices[2].on = false;
     voices[2].note = 0;
-    voices[2].pitch = fHslider2;
-    voices[2].gain = &dsp.fHslider5;
+    voices[2].pitch = &dsp.fHslider4;
+    voices[2].gain = &dsp.fVbargraph2;
     voices[2].gate = &dsp.fButton2;
 }
 
