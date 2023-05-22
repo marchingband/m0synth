@@ -11,6 +11,7 @@
 #include "bflb_uart.h"
 
 #include "bl616_glb.h"
+#include "bl616_irq.h"
 #include "board.h"
 
 #include "bflb_core.h"
