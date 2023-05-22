@@ -150,18 +150,18 @@ void dsp_init(size_t buf_size){
     // dsp.fButton5 = 1.0f;
 }
 
-int start = 0;
-int end = 0;
+int last_start = 0;
+int consumed = 0;
 int period = 0;
 
 void print_bench(void){
-    printf("%d of %d us\n", end - start, period);
+    printf("%d of %d [us]\n", consumed, period);
 }
 
 void dsp_run(int16_t *dest){
     int now = bflb_mtimer_get_time_us();
-    period = now - start;
-    start = now;
+    period = now - last_start;
+    last_start = now;
     computemydsp(&dsp, buf_len, NULL, buf);
     for(int i=0;i<buf_len;i++){
         float val = buf[0][i];
@@ -171,7 +171,7 @@ void dsp_run(int16_t *dest){
         dest[ index ] = u16;
         dest[ index + 1 ] = u16;
     }
-    end = bflb_mtimer_get_time_us();
+    consumed = bflb_mtimer_get_time_us() - now;
 }
 
 void play(uint8_t note){
@@ -180,7 +180,7 @@ void play(uint8_t note){
         return;
     }
     float hz = note_to_freq(note);
-    printf("playing %d:%f on voice %d\n", note, hz, ret);
+    // printf("playing %d [%fhz] on voice %d\n", note, hz, ret);
     voices[ret].on = true;
     voices[ret].note = note;
     *voices[ret].pitch = hz;
