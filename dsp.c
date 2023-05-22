@@ -54,24 +54,24 @@ void dsp_init(size_t buf_size){
 
     voices[0].on = false;
     voices[0].note = 0;
-    voices[0].pitch = &dsp.fHslider2;
+    voices[0].pitch = &dsp.fHslider0;
     voices[0].gain = &dsp.fVbargraph0;
     voices[0].gate = &dsp.fButton0;
 
     voices[1].on = false;
     voices[1].note = 0;
-    voices[1].pitch = &dsp.fHslider3;
+    voices[1].pitch = &dsp.fHslider1;
     voices[1].gain = &dsp.fVbargraph1;
     voices[1].gate = &dsp.fButton1;
 
     voices[2].on = false;
     voices[2].note = 0;
-    voices[2].pitch = &dsp.fHslider4;
+    voices[2].pitch = &dsp.fHslider2;
     voices[2].gain = &dsp.fVbargraph2;
     voices[2].gate = &dsp.fButton2;
 
-    dsp.fHslider0 = 1.0f; // resonance
-    dsp.fHslider1 = 2000.0f; // cuttof frequency
+    dsp.fHslider3 = 1.0f; // resonance
+    dsp.fHslider4 = 2000.0f; // cuttof frequency
     // dsp.fButton0 = 1.0f; 
     // dsp.fButton1 = 1.0f;
     // dsp.fButton2 = 1.0f;
