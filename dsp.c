@@ -22,6 +22,15 @@ struct voice_s voices[NUM_VOICES];
 int get_next_voice( void ){
     for(int i = 0 ; i < NUM_VOICES; i++)
     {
+        // if(*voices[i].gain == 0.0f)
+        if((voices[i].on == false) && (*voices[i].gain == 0.0f)) // completely open
+        {
+            printf("next voice is %d\n", i);
+            return i;
+        }
+    }
+    for(int i = 0 ; i < NUM_VOICES; i++) // has fully decayed
+    {
         // if(voices[i].on == false)
         if(*voices[i].gain == 0.0f)
         {
@@ -32,7 +41,7 @@ int get_next_voice( void ){
     for(int i = 0 ; i < NUM_VOICES; i++)
     {
         // if(*voices[i].gain == 0.0f)
-        if(voices[i].on == false)
+        if(voices[i].on == false) // open but not yet done
         {
             printf("next voice is %d\n", i);
             return i;
