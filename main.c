@@ -296,12 +296,14 @@ int main(void)
 
     // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
     // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
-    // int cnt = 0;
-    print_bench();
+    int cnt = 0;
+    bool bench = true;
     while (1) {
         // uint64_t start = bflb_mtimer_get_time_us();
-        // if(cnt++ > 100000){
-        // }
+        if(bench && (cnt++ > 100000)){
+            print_bench();
+            bench = false;
+        }
         poll_uart();
         // bflb_mtimer_delay_ms(1000);
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
