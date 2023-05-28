@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <FreeRTOS.h>
 
-
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t midi_buffer[512];
 
 struct usbh_urb cdc_bulkin_urb;
