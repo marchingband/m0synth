@@ -263,52 +263,44 @@ int main(void)
     board_init();
 
     /* start usb */
+    printf("Starting usb host task...\r\n");
     usbh_initialize();
 
     /* dsp init */
-    dsp_init(BUF_SIZE);
+    // dsp_init(BUF_SIZE);
 
     /* gpio init */
-    audac_gpio_init();
+    // audac_gpio_init();
 
     /* adc init */
     // adc_init();
 
     /* audac init */
-    audac_init();
+    // audac_init();
 
     /* dma init */
-    audac_dma_init();
-    bflb_dma_channel_start(audac_dma_hd);
+    // audac_dma_init();
+    // bflb_dma_channel_start(audac_dma_hd);
 
     /* audac start */
-    bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
-    // bflb_mtimer_delay_ms(1000);
+    // bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
 
     /* midi */
-    uart_receive_init();
-
-    // csi_vic_set_prio(BL616_IRQ_UART0, 1);
-
-    // int32_t uart_int_num = BL616_IRQ_UART0;
-    // int32_t audac_int_num = BL616_IRQ_AUDAC;
-
-    // uint32_t uart_prio = csi_vic_get_prio(uart_int_num);
-    // uint32_t audac_prio = csi_vic_get_prio(BL616_IRQ_AUDAC);
+    // uart_receive_init();
 
     vTaskStartScheduler();
 
     // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
     // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
-    int cnt = 0;
-    bool bench = true;
+    // int cnt = 0;
+    // bool bench = true;
     while (1) {
         // uint64_t start = bflb_mtimer_get_time_us();
-        if(bench && (cnt++ > 100000)){
-            print_bench();
-            bench = false;
-        }
-        poll_uart();
+        // if(bench && (cnt++ > 100000)){
+        //     print_bench();
+        //     bench = false;
+        // }
+        // poll_uart();
         // bflb_mtimer_delay_ms(1000);
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
