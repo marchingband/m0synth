@@ -296,7 +296,7 @@ int main(void)
     // uint32_t uart_prio = csi_vic_get_prio(uart_int_num);
     // uint32_t audac_prio = csi_vic_get_prio(BL616_IRQ_AUDAC);
 
-    
+    vTaskStartScheduler();
 
     // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
     // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
