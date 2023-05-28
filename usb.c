@@ -6,6 +6,7 @@
 
 #include "usbh_core.h"
 #include "usb_audio.h"
+#include <stdio.h>
 
 struct usbh_midi {
     struct usbh_hubport *hport;
@@ -19,6 +20,7 @@ struct usbh_midi {
 
 static int usbh_midi_connect(struct usbh_hubport *hport, uint8_t intf)
 {
+    printf("usbh_midi_connect");
     struct usbh_endpoint_cfg ep_cfg = { 0 };
     struct usb_endpoint_descriptor *ep_desc;
     int ret;
@@ -48,6 +50,7 @@ static int usbh_midi_connect(struct usbh_hubport *hport, uint8_t intf)
     strncpy(hport->config.intf[intf].devname, DEV_FORMAT, CONFIG_USBHOST_DEV_NAMELEN);
 
     USB_LOG_INFO("Register MIDI Class:%s\r\n", hport->config.intf[intf].devname);
+    printf("Register MIDI Class:%s\r\n", hport->config.intf[intf].devname);
 
     return ret;
 }

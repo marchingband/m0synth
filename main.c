@@ -16,9 +16,10 @@
 
 #include "bflb_core.h"
 
-void dsp_run(int16_t *dest);
-void dsp_init(size_t buf_size);
-void uart_receive_init(void);
+void dsp_run( int16_t *dest );
+void dsp_init( size_t buf_size );
+void uart_receive_init( void );
+void poll_uart( void );
 
 void test(void);
 void print_bench(void);
