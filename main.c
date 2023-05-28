@@ -20,6 +20,7 @@ void dsp_run( int16_t *dest );
 void dsp_init( size_t buf_size );
 void uart_receive_init( void );
 void poll_uart( void );
+void usb_midi_start( void );
 
 void test(void);
 void print_bench(void);
@@ -287,6 +288,7 @@ int main(void)
 
     /* midi */
     // uart_receive_init();
+    usb_midi_start();
 
     vTaskStartScheduler();
 

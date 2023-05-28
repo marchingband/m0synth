@@ -116,7 +116,7 @@ void usbh_cdc_acm_callback(void *arg, int nbytes)
     }
 }
 
-static void usbh_cdc_acm_thread(void *argument)
+static void usbh_midi_thread(void *argument)
 {
     int ret;
     struct usbh_midi *midi_class;
@@ -171,4 +171,8 @@ find_class:
             usb_osal_msleep(1000);
         }
     }
+}
+
+void usb_midi_start( void ){
+    usb_osal_thread_create("usbh_midi", 2048, CONFIG_USBHOST_PSC_PRIO + 1, usbh_midi_thread, NULL);
 }
