@@ -261,6 +261,9 @@ int main(void)
     /* board init */
     board_init();
 
+    /* start usb */
+    usbh_initialize();
+
     /* dsp init */
     dsp_init(BUF_SIZE);
 
