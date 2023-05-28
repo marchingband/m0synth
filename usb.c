@@ -7,6 +7,8 @@
 #include "usbh_core.h"
 #include "usb_audio.h"
 #include <stdio.h>
+#include <FreeRTOS.h>
+
 
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t midi_buffer[512];
 
