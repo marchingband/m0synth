@@ -8,6 +8,11 @@
 #include "usb_audio.h"
 #include <stdio.h>
 
+USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t midi_buffer[512];
+
+struct usbh_urb cdc_bulkin_urb;
+struct usbh_urb cdc_bulkout_urb;
+
 struct usbh_midi {
     struct usbh_hubport *hport;
 
@@ -96,3 +101,74 @@ CLASS_INFO_DEFINE const struct usbh_class_info midi_streaming_class_info = {
     .pid = 0x00,
     .class_driver = &midi_streaming_class_driver
 };
+
+/* -------------------------- */
+
+void usbh_cdc_acm_callback(void *arg, int nbytes)
+{
+    //struct usbh_cdc_acm *cdc_acm_class = (struct usbh_cdc_acm *)arg;
+
+    if (nbytes > 0) {
+        for (size_t i = 0; i < nbytes; i++) {
+            USB_LOG_RAW("0x%02x ", midi_buffer[i]);
+        }
+        USB_LOG_RAW("nbytes:%d\r\n", nbytes);
+    }
+}
+
+static void usbh_cdc_acm_thread(void *argument)
+{
+    int ret;
+    struct usbh_midi *midi_class;
+
+    while (1) {
+        // clang-format off
+find_class:
+        // clang-format on
+        midi_class = (struct usbh_midi *)usbh_find_class_instance(DEV_FORMAT);
+        if (midi_class == NULL) {
+            USB_LOG_RAW("do not find /dev/midi\r\n");
+            usb_osal_msleep(1000);
+            continue;
+        }
+        memset(midi_buffer, 0, 512);
+
+        usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, NULL, NULL);
+        ret = usbh_submit_urb(&cdc_bulkin_urb);
+        if (ret < 0) {
+            USB_LOG_RAW("bulk in error,ret:%d\r\n", ret);
+        } else {
+            USB_LOG_RAW("recv over:%d\r\n", cdc_bulkin_urb.actual_length);
+            for (size_t i = 0; i < cdc_bulkin_urb.actual_length; i++) {
+                USB_LOG_RAW("0x%02x ", midi_buffer[i]);
+            }
+        }
+
+        USB_LOG_RAW("\r\n");
+        const uint8_t data1[10] = { 0x02, 0x00, 0x00, 0x00, 0x02, 0x02, 0x08, 0x14 };
+
+        memcpy(midi_buffer, data1, 8);
+        usbh_bulk_urb_fill(&cdc_bulkout_urb, midi_class->bulkout, midi_buffer, 8, 3000, NULL, NULL);
+        ret = usbh_submit_urb(&cdc_bulkout_urb);
+        if (ret < 0) {
+            USB_LOG_RAW("bulk out error,ret:%d\r\n", ret);
+        } else {
+            USB_LOG_RAW("send over:%d\r\n", cdc_bulkout_urb.actual_length);
+        }
+
+        usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, usbh_cdc_acm_callback, midi_class);
+        ret = usbh_submit_urb(&cdc_bulkin_urb);
+        if (ret < 0) {
+            USB_LOG_RAW("bulk in error,ret:%d\r\n", ret);
+        } else {
+        }
+
+        while (1) {
+            midi_class = (struct usbh_midi *)usbh_find_class_instance(DEV_FORMAT);
+            if (midi_class == NULL) {
+                goto find_class;
+            }
+            usb_osal_msleep(1000);
+        }
+    }
+}
