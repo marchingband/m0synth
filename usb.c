@@ -97,7 +97,7 @@ static int usbh_midi_disconnect(struct usbh_hubport *hport, uint8_t intf)
     return ret;
 }
 
-const struct usbh_class_driver midi_streaming_class_driver = {
+static const struct usbh_class_driver midi_streaming_class_driver = {
     .driver_name = "midi_streaming",
     .connect = usbh_midi_connect,
     .disconnect = usbh_midi_disconnect};
