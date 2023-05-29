@@ -119,6 +119,15 @@ void poll_uart(void)
     }
 }
 
+void usb_midi_in(char ch)
+{
+    int ret = parse(ch);
+    if (ret)
+    {
+        handle_midi(getMidiMsg(), getMidiMsgLen());
+    }
+}
+
 void uart_receive_init(void)
 {
 

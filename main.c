@@ -266,26 +266,28 @@ int main(void)
     usbh_initialize();
 
     /* dsp init */
-    // dsp_init(BUF_SIZE);
+    dsp_init(BUF_SIZE);
 
     /* gpio init */
-    // audac_gpio_init();
+    audac_gpio_init();
 
     /* adc init */
     // adc_init();
 
     /* audac init */
-    // audac_init();
+    audac_init();
 
     /* dma init */
-    // audac_dma_init();
-    // bflb_dma_channel_start(audac_dma_hd);
+    audac_dma_init();
+    bflb_dma_channel_start(audac_dma_hd);
 
     /* audac start */
-    // bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
+    bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
 
-    /* midi */
-    // uart_receive_init();
+    /* uart midi */
+    uart_receive_init();
+
+    /* usb midi host */
     usb_midi_start();
 
     vTaskStartScheduler();

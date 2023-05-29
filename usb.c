@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <FreeRTOS.h>
 
+// declare from midi.c
+void usb_midi_in(char ch);
+
 USB_NOCACHE_RAM_SECTION USB_MEM_ALIGNX uint8_t midi_buffer[512];
 
 struct usbh_urb cdc_bulkin_urb;
@@ -119,11 +122,21 @@ void usbh_cdc_acm_callback(void *arg, int nbytes)
 
     if (nbytes > 0)
     {
-        for (size_t i = 0; i < nbytes; i++)
-        {
-            USB_LOG_RAW("0x%02x ", midi_buffer[i]);
-        }
+        // for (size_t i = 0; i < nbytes; i++)
+        // {
+        //     USB_LOG_RAW("0x%02x ", midi_buffer[i]);
+        // }
         USB_LOG_RAW("nbytes:%d\r\n", nbytes);
+        for (int i=0; i< nbytes; i+=4)
+        {
+            if(midi_buffer[i] == 0x00)
+            {
+                break;
+            }
+            usb_midi_in(midi_buffer[i + 1]);
+            usb_midi_in(midi_buffer[i + 2]);
+            usb_midi_in(midi_buffer[i + 3]);
+        }
     }
 }
 
