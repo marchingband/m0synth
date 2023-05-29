@@ -189,7 +189,7 @@ static void usbh_midi_thread(void *argument)
             midi_class = (struct usbh_midi *)usbh_find_class_instance(DEV_FORMAT);
             if (midi_class == NULL)
             {
-                usb_osal_msleep(1000);
+                // usb_osal_msleep(1000);
                 goto find_class;
             }
             else
