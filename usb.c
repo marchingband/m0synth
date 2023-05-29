@@ -27,7 +27,7 @@ struct usbh_midi
 
 static int usbh_midi_connect(struct usbh_hubport *hport, uint8_t intf)
 {
-    printf("usbh_midi_connect");
+    printf("class connect");
     struct usbh_endpoint_cfg ep_cfg = {0};
     struct usb_endpoint_descriptor *ep_desc;
     int ret;
