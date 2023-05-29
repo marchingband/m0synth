@@ -189,7 +189,6 @@ static void usbh_midi_thread(void *argument)
             midi_class = (struct usbh_midi *)usbh_find_class_instance(DEV_FORMAT);
             if (midi_class == NULL)
             {
-                // usb_osal_msleep(1000);
                 goto find_class;
             }
             else
@@ -197,6 +196,7 @@ static void usbh_midi_thread(void *argument)
                 usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 0, usbh_cdc_acm_callback, midi_class);
                 ret = usbh_submit_urb(&cdc_bulkin_urb);
             }
+            usb_osal_msleep(10);
         }
     }
 }
