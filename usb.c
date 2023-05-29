@@ -47,7 +47,7 @@ static int usbh_midi_connect(struct usbh_hubport *hport, uint8_t intf)
 
     for (uint8_t i = 0; i < hport->config.intf[intf].altsetting[0].intf_desc.bNumEndpoints; i++)
     {
-        ep_desc = &hport->config.intf[intf + 1].altsetting[0].ep[i].ep_desc;
+        ep_desc = &hport->config.intf[intf].altsetting[0].ep[i].ep_desc;
 
         if (ep_desc->bEndpointAddress & 0x80)
         {
