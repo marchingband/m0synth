@@ -51,11 +51,11 @@ static int usbh_midi_connect(struct usbh_hubport *hport, uint8_t intf)
 
         if (ep_desc->bEndpointAddress & 0x80)
         {
-            usbh_hport_activate_epx(midi_class->bulkin, hport, ep_desc);
+            usbh_hport_activate_epx(midi_class->bulkout, hport, ep_desc);
         }
         else
         {
-            usbh_hport_activate_epx(midi_class->bulkout, hport, ep_desc);
+            usbh_hport_activate_epx(midi_class->bulkin, hport, ep_desc);
         }
     }
 
