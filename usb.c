@@ -183,7 +183,7 @@ static void usbh_midi_thread(void *argument)
         // else
         // {
         // }
-
+    submit_urb:
         usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 0, usbh_cdc_acm_callback, midi_class);
         ret = usbh_submit_urb(&cdc_bulkin_urb);
         if (ret < 0)
@@ -200,6 +200,10 @@ static void usbh_midi_thread(void *argument)
             if (midi_class == NULL)
             {
                 goto find_class;
+            }
+            else
+            {
+                goto submit_urb;
             }
             usb_osal_msleep(1000);
         }
