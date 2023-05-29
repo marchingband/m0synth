@@ -27,7 +27,7 @@ struct usbh_midi
 
 static int usbh_midi_connect(struct usbh_hubport *hport, uint8_t intf)
 {
-    printf("class connect");
+    // printf("class connect");
     struct usbh_endpoint_cfg ep_cfg = {0};
     struct usb_endpoint_descriptor *ep_desc;
     int ret;
@@ -135,7 +135,7 @@ static void usbh_midi_thread(void *argument)
     while (1)
     {
     find_class:
-        midi_class = (struct usbh_midi *)usbh_find_class_instance(DEV_FORMAT);
+        midi_class = (struct usbh_midi *)usbh_find_class_instance("/dev/midi");
         if (midi_class == NULL)
         {
             USB_LOG_RAW("do not find /dev/midi\r\n");
@@ -144,35 +144,35 @@ static void usbh_midi_thread(void *argument)
         }
         memset(midi_buffer, 0, 512);
 
-        // usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, NULL, NULL);
-        // ret = usbh_submit_urb(&cdc_bulkin_urb);
-        // if (ret < 0)
-        // {
-        //     USB_LOG_RAW("bulk in error,ret:%d\r\n", ret);
-        // }
-        // else
-        // {
-        //     USB_LOG_RAW("recv over:%d\r\n", cdc_bulkin_urb.actual_length);
-        //     for (size_t i = 0; i < cdc_bulkin_urb.actual_length; i++)
-        //     {
-        //         USB_LOG_RAW("0x%02x ", midi_buffer[i]);
-        //     }
-        // }
+        usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, NULL, NULL);
+        ret = usbh_submit_urb(&cdc_bulkin_urb);
+        if (ret < 0)
+        {
+            USB_LOG_RAW("bulk in error,ret:%d\r\n", ret);
+        }
+        else
+        {
+            USB_LOG_RAW("recv over:%d\r\n", cdc_bulkin_urb.actual_length);
+            for (size_t i = 0; i < cdc_bulkin_urb.actual_length; i++)
+            {
+                USB_LOG_RAW("0x%02x ", midi_buffer[i]);
+            }
+        }
 
-        // USB_LOG_RAW("\r\n");
-        // const uint8_t data1[10] = {0x02, 0x00, 0x00, 0x00, 0x02, 0x02, 0x08, 0x14};
+        USB_LOG_RAW("\r\n");
+        const uint8_t data1[10] = {0x02, 0x00, 0x00, 0x00, 0x02, 0x02, 0x08, 0x14};
 
-        // memcpy(midi_buffer, data1, 8);
-        // usbh_bulk_urb_fill(&cdc_bulkout_urb, midi_class->bulkout, midi_buffer, 8, 3000, NULL, NULL);
-        // ret = usbh_submit_urb(&cdc_bulkout_urb);
-        // if (ret < 0)
-        // {
-        //     USB_LOG_RAW("bulk out error,ret:%d\r\n", ret);
-        // }
-        // else
-        // {
-        //     USB_LOG_RAW("send over:%d\r\n", cdc_bulkout_urb.actual_length);
-        // }
+        memcpy(midi_buffer, data1, 8);
+        usbh_bulk_urb_fill(&cdc_bulkout_urb, midi_class->bulkout, midi_buffer, 8, 3000, NULL, NULL);
+        ret = usbh_submit_urb(&cdc_bulkout_urb);
+        if (ret < 0)
+        {
+            USB_LOG_RAW("bulk out error,ret:%d\r\n", ret);
+        }
+        else
+        {
+            USB_LOG_RAW("send over:%d\r\n", cdc_bulkout_urb.actual_length);
+        }
 
         usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, usbh_cdc_acm_callback, midi_class);
         ret = usbh_submit_urb(&cdc_bulkin_urb);
