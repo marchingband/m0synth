@@ -12,7 +12,8 @@
 
 #define NUM_VOICES 8
 
-struct voice_s {
+struct voice_s
+{
     bool on;
     uint8_t note;
     float *pitch;
@@ -22,36 +23,37 @@ struct voice_s {
 
 struct voice_s voices[NUM_VOICES];
 
-int get_next_voice( uint8_t note ){
-    for(int i = 0 ; i < NUM_VOICES; i++)
+int get_next_voice(uint8_t note)
+{
+    for (int i = 0; i < NUM_VOICES; i++)
     {
-        if(voices[i].note == note) // retrigger
+        if (voices[i].note == note) // retrigger
         {
             return i;
         }
     }
 
-    for(int i = 0 ; i < NUM_VOICES; i++)
+    for (int i = 0; i < NUM_VOICES; i++)
     {
-        if((voices[i].on == false) && (*voices[i].gain == 0.0f)) // completely open
-        {
-            printf("next voice is %d\n", i);
-            return i;
-        }
-    }
-
-    for(int i = 0 ; i < NUM_VOICES; i++)
-    {
-        if(*voices[i].gain == 0.0f) // has fully decayed
+        if ((voices[i].on == false) && (*voices[i].gain == 0.0f)) // completely open
         {
             printf("next voice is %d\n", i);
             return i;
         }
     }
 
-    for(int i = 0 ; i < NUM_VOICES; i++)
+    for (int i = 0; i < NUM_VOICES; i++)
     {
-        if(voices[i].on == false) // open but not yet done
+        if (*voices[i].gain == 0.0f) // has fully decayed
+        {
+            printf("next voice is %d\n", i);
+            return i;
+        }
+    }
+
+    for (int i = 0; i < NUM_VOICES; i++)
+    {
+        if (voices[i].on == false) // open but not yet done
         {
             printf("next voice is %d\n", i);
             return i;
@@ -62,10 +64,11 @@ int get_next_voice( uint8_t note ){
     return -1;
 }
 
-int get_voice_by_note(uint8_t note){
-    for(int i = 0 ; i < NUM_VOICES; i++)
+int get_voice_by_note(uint8_t note)
+{
+    for (int i = 0; i < NUM_VOICES; i++)
     {
-        if( voices[i].note == note)
+        if (voices[i].note == note)
         {
             printf("%d, found voice is %d\n", note, i);
             return i;
@@ -75,8 +78,9 @@ int get_voice_by_note(uint8_t note){
     return -1;
 }
 
-float note_to_freq(int note) {
-    float a = 440; //frequency of A (coomon value is 440Hz)
+float note_to_freq(int note)
+{
+    float a = 440; // frequency of A (coomon value is 440Hz)
     return (a / 32) * pow(2, ((note - 9) / 12.0));
 }
 
@@ -85,7 +89,8 @@ mydsp dsp;
 float *buf[1];
 size_t buf_len;
 
-void dsp_init(size_t buf_size){
+void dsp_init(size_t buf_size)
+{
     size_t cnt = buf_size / 2;
     initmydsp(&dsp, 32000);
     buf[0] = (float *)malloc(cnt * sizeof(float));
@@ -142,7 +147,7 @@ void dsp_init(size_t buf_size){
     // dsp.fHslider8 = 1.0f; // resonance
     // dsp.fHslider9 = 2000.0f; // cuttof frequency
 
-    // dsp.fButton0 = 1.0f; 
+    // dsp.fButton0 = 1.0f;
     // dsp.fButton1 = 1.0f;
     // dsp.fButton2 = 1.0f;
     // dsp.fButton3 = 1.0f;
@@ -154,29 +159,34 @@ int last_start = 0;
 int consumed = 0;
 int period = 0;
 
-void print_bench(void){
+void print_bench(void)
+{
     printf("%d of %d [us]\n", consumed, period);
 }
 
-void dsp_run(int16_t *dest){
+void dsp_run(int16_t *dest)
+{
     int now = bflb_mtimer_get_time_us();
     period = now - last_start;
     last_start = now;
     computemydsp(&dsp, buf_len, NULL, buf);
-    for(int i=0;i<buf_len;i++){
+    for (int i = 0; i < buf_len; i++)
+    {
         float val = buf[0][i];
         int16_t i16 = val * 32767;
         uint16_t u16 = (uint16_t)i16;
         size_t index = i * 2;
-        dest[ index ] = u16;
-        dest[ index + 1 ] = u16;
+        dest[index] = u16;
+        dest[index + 1] = u16;
     }
     consumed = bflb_mtimer_get_time_us() - now;
 }
 
-void play(uint8_t note){
+void play(uint8_t note)
+{
     int ret = get_next_voice(note);
-    if(ret == -1){
+    if (ret == -1)
+    {
         return;
     }
     float hz = note_to_freq(note);
@@ -187,9 +197,12 @@ void play(uint8_t note){
     *voices[ret].gate = 1.0f;
 }
 
-void stop(uint8_t note){
-    for(int i=0; i<NUM_VOICES; i++){
-        if(voices[i].note == note){
+void stop(uint8_t note)
+{
+    for (int i = 0; i < NUM_VOICES; i++)
+    {
+        if (voices[i].note == note)
+        {
             voices[i].on = false;
             *voices[i].gate = 0.0f;
         }
@@ -201,17 +214,20 @@ void stop(uint8_t note){
 //     dsp.fEntry1 = hz;
 // }
 
-void set_filter1(uint8_t val){
+void set_filter1(uint8_t val)
+{
     float freq = (float)val / 127.0f; // 0 ~ 1
     dsp.fHslider0 = freq;
 }
 
-void set_filter2(uint8_t val){
+void set_filter2(uint8_t val)
+{
     float freq = ((float)val / 127.0f) * 2000; // 0 ~ 2000
     dsp.fHslider1 = freq;
 }
 
-void set_filter3(uint8_t val){
+void set_filter3(uint8_t val)
+{
     // float freq = ((float)val / 127.0f) * 40;
     // dsp.fHslider2 = freq;
 }

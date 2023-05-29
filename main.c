@@ -1,4 +1,3 @@
-
 #include <math.h>
 #include <stdlib.h>
 
@@ -19,34 +18,29 @@
 #include "usbh_core.h"
 #include <FreeRTOS.h>
 
-
-void dsp_run( int16_t *dest );
-void dsp_init( size_t buf_size );
-void uart_receive_init( void );
-void poll_uart( void );
-void usb_midi_start( void );
+void dsp_run(int16_t *dest);
+void dsp_init(size_t buf_size);
+void uart_receive_init(void);
+void poll_uart(void);
+void usb_midi_start(void);
 
 void test(void);
 void print_bench(void);
 
-static int min (int a, int b)
+static int min(int a, int b)
 {
-    return(a < b ? a : b);
+    return (a < b ? a : b);
 }
 
-static int max (int a, int b)
+static int max(int a, int b)
 {
-    return(a > b ? a : b);
+    return (a > b ? a : b);
 }
-
-// clang-format off
 
 #define BUF_SIZE 64
 
 static uint16_t tic[BUF_SIZE];
 static uint16_t toc[BUF_SIZE];
-
-// clang-format on
 
 struct bflb_device_s *audac_dma_hd;
 struct bflb_device_s *audac_hd;
@@ -67,7 +61,7 @@ static void compute(int tictoc)
 
 void refresh_dma(int tictoc)
 {
-    if(tictoc)
+    if (tictoc)
     {
         transfers_toc[0].src_addr = (uint32_t)toc;
         transfers_toc[0].dst_addr = (uint32_t)DMA_ADDR_AUDAC_TDR;
@@ -197,14 +191,10 @@ static void audac_init(void)
 
 /* ADC */
 struct bflb_adc_channel_s chan[] = {
-    { 
-        .pos_chan = ADC_CHANNEL_5,
-        .neg_chan = ADC_CHANNEL_GND 
-    },
-    {
-        .pos_chan = ADC_CHANNEL_6,
-        .neg_chan = ADC_CHANNEL_GND 
-    },
+    {.pos_chan = ADC_CHANNEL_5,
+     .neg_chan = ADC_CHANNEL_GND},
+    {.pos_chan = ADC_CHANNEL_6,
+     .neg_chan = ADC_CHANNEL_GND},
 };
 
 #define NUM_ADC_CHANNELS 2
@@ -212,7 +202,8 @@ struct bflb_device_s *adc;
 int32_t adc_1 = 0;
 int32_t adc_2 = 0;
 
-static void adc_init( void ) {
+static void adc_init(void)
+{
     struct bflb_device_s *gpio;
     gpio = bflb_device_get_by_name("gpio");
 
@@ -236,10 +227,12 @@ static void adc_init( void ) {
     bflb_adc_channel_config(adc, chan, NUM_ADC_CHANNELS);
 }
 
-static void adc_read( void ){
+static void adc_read(void)
+{
     bflb_adc_start_conversion(adc);
 
-    while (bflb_adc_get_count(adc) < NUM_ADC_CHANNELS) {
+    while (bflb_adc_get_count(adc) < NUM_ADC_CHANNELS)
+    {
         bflb_mtimer_delay_ms(1);
     }
 
@@ -254,7 +247,8 @@ static void adc_read( void ){
     adc_2 = result.millivolt;
 }
 
-static void handle_pots (void){
+static void handle_pots(void)
+{
     // fHslider0 = (float) adc_1;
     // float vol = -(((float) adc_2 / 3200.0f ) * 96.0f);
     // fHslider1 = vol;
@@ -300,7 +294,8 @@ int main(void)
     // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
     // int cnt = 0;
     // bool bench = true;
-    while (1) {
+    while (1)
+    {
         // uint64_t start = bflb_mtimer_get_time_us();
         // if(bench && (cnt++ > 100000)){
         //     print_bench();
