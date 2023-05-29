@@ -144,37 +144,47 @@ static void usbh_midi_thread(void *argument)
         }
         memset(midi_buffer, 0, 512);
 
-        usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, NULL, NULL);
-        ret = usbh_submit_urb(&cdc_bulkin_urb);
-        if (ret < 0)
-        {
-            USB_LOG_RAW("bulk in error,ret:%d\r\n", ret);
-        }
-        else
-        {
-            USB_LOG_RAW("recv over:%d\r\n", cdc_bulkin_urb.actual_length);
-            for (size_t i = 0; i < cdc_bulkin_urb.actual_length; i++)
-            {
-                USB_LOG_RAW("0x%02x ", midi_buffer[i]);
-            }
-        }
+        // usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, NULL, NULL);
+        // ret = usbh_submit_urb(&cdc_bulkin_urb);
+        // if (ret < 0)
+        // {
+        //     USB_LOG_RAW("bulk in error,ret:%d\r\n", ret);
+        // }
+        // else
+        // {
+        //     USB_LOG_RAW("recv over:%d\r\n", cdc_bulkin_urb.actual_length);
+        //     for (size_t i = 0; i < cdc_bulkin_urb.actual_length; i++)
+        //     {
+        //         USB_LOG_RAW("0x%02x ", midi_buffer[i]);
+        //     }
+        // }
 
-        USB_LOG_RAW("\r\n");
-        const uint8_t data1[10] = {0x02, 0x00, 0x00, 0x00, 0x02, 0x02, 0x08, 0x14};
+        // USB_LOG_RAW("\r\n");
+        // const uint8_t data1[10] = {0x02, 0x00, 0x00, 0x00, 0x02, 0x02, 0x08, 0x14};
 
-        memcpy(midi_buffer, data1, 8);
-        usbh_bulk_urb_fill(&cdc_bulkout_urb, midi_class->bulkout, midi_buffer, 8, 3000, NULL, NULL);
-        ret = usbh_submit_urb(&cdc_bulkout_urb);
-        if (ret < 0)
-        {
-            USB_LOG_RAW("bulk out error,ret:%d\r\n", ret);
-        }
-        else
-        {
-            USB_LOG_RAW("send over:%d\r\n", cdc_bulkout_urb.actual_length);
-        }
+        // memcpy(midi_buffer, data1, 8);
+        // usbh_bulk_urb_fill(&cdc_bulkout_urb, midi_class->bulkout, midi_buffer, 8, 3000, NULL, NULL);
+        // ret = usbh_submit_urb(&cdc_bulkout_urb);
+        // if (ret < 0)
+        // {
+        //     USB_LOG_RAW("bulk out error,ret:%d\r\n", ret);
+        // }
+        // else
+        // {
+        //     USB_LOG_RAW("send over:%d\r\n", cdc_bulkout_urb.actual_length);
+        // }
 
-        usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, usbh_cdc_acm_callback, midi_class);
+        // usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 3000, usbh_cdc_acm_callback, midi_class);
+        // ret = usbh_submit_urb(&cdc_bulkin_urb);
+        // if (ret < 0)
+        // {
+        //     USB_LOG_RAW("bulk in error,ret:%d\r\n", ret);
+        // }
+        // else
+        // {
+        // }
+
+        usbh_bulk_urb_fill(&cdc_bulkin_urb, midi_class->bulkin, midi_buffer, 64, 0, usbh_cdc_acm_callback, midi_class);
         ret = usbh_submit_urb(&cdc_bulkin_urb);
         if (ret < 0)
         {
