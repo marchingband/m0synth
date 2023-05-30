@@ -8,7 +8,8 @@
 
 // #include "square-diode-lfo.h"
 // #include "square-diode.h"
-#include "moog-poly-8.h"
+// #include "moog-poly-8.h"
+#include "poly-8.h"
 
 #define NUM_VOICES 8
 
