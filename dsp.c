@@ -11,7 +11,7 @@
 // #include "moog-poly-8.h"
 #include "moog-poly-8-verb.h"
 
-#define NUM_VOICES 3
+#define NUM_VOICES 1
 
 struct voice_s
 {
@@ -103,17 +103,17 @@ void dsp_init(size_t buf_size)
     voices[0].gain = &dsp.fVbargraph0;
     voices[0].gate = &dsp.fButton0;
 
-    voices[1].on = false;
-    voices[1].note = 0;
-    voices[1].pitch = &dsp.fEntry1;
-    voices[1].gain = &dsp.fVbargraph1;
-    voices[1].gate = &dsp.fButton1;
+    // voices[1].on = false;
+    // voices[1].note = 0;
+    // voices[1].pitch = &dsp.fEntry1;
+    // voices[1].gain = &dsp.fVbargraph1;
+    // voices[1].gate = &dsp.fButton1;
 
-    voices[2].on = false;
-    voices[2].note = 0;
-    voices[2].pitch = &dsp.fEntry2;
-    voices[2].gain = &dsp.fVbargraph2;
-    voices[2].gate = &dsp.fButton2;
+    // voices[2].on = false;
+    // voices[2].note = 0;
+    // voices[2].pitch = &dsp.fEntry2;
+    // voices[2].gain = &dsp.fVbargraph2;
+    // voices[2].gate = &dsp.fButton2;
 
     // voices[3].on = false;
     // voices[3].note = 0;
