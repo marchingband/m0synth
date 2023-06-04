@@ -109,17 +109,17 @@ void dsp_init(size_t buf_size)
     voices[1].gain = &dsp.fVbargraph1;
     voices[1].gate = &dsp.fButton1;
 
-    // voices[2].on = false;
-    // voices[2].note = 0;
-    // voices[2].pitch = &dsp.fEntry2;
-    // voices[2].gain = &dsp.fVbargraph2;
-    // voices[2].gate = &dsp.fButton2;
+    voices[2].on = false;
+    voices[2].note = 0;
+    voices[2].pitch = &dsp.fEntry2;
+    voices[2].gain = &dsp.fVbargraph2;
+    voices[2].gate = &dsp.fButton2;
 
-    // voices[3].on = false;
-    // voices[3].note = 0;
-    // voices[3].pitch = &dsp.fEntry3;
-    // voices[3].gain = &dsp.fVbargraph3;
-    // voices[3].gate = &dsp.fButton3;
+    voices[3].on = false;
+    voices[3].note = 0;
+    voices[3].pitch = &dsp.fEntry3;
+    voices[3].gain = &dsp.fVbargraph3;
+    voices[3].gate = &dsp.fButton3;
 
     // voices[4].on = false;
     // voices[4].note = 0;
