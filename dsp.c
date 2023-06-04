@@ -8,10 +8,10 @@
 
 // #include "square-diode-lfo.h"
 // #include "square-diode.h"
-// #include "moog-poly-8.h"
-#include "moog-poly-8-verb.h"
+#include "moog-poly-8.h"
+// #include "moog-poly-8-verb.h"
 
-#define NUM_VOICES 1
+#define NUM_VOICES 8
 
 struct voice_s
 {
@@ -103,47 +103,47 @@ void dsp_init(size_t buf_size)
     voices[0].gain = &dsp.fVbargraph0;
     voices[0].gate = &dsp.fButton0;
 
-    // voices[1].on = false;
-    // voices[1].note = 0;
-    // voices[1].pitch = &dsp.fEntry1;
-    // voices[1].gain = &dsp.fVbargraph1;
-    // voices[1].gate = &dsp.fButton1;
+    voices[1].on = false;
+    voices[1].note = 0;
+    voices[1].pitch = &dsp.fEntry1;
+    voices[1].gain = &dsp.fVbargraph1;
+    voices[1].gate = &dsp.fButton1;
 
-    // voices[2].on = false;
-    // voices[2].note = 0;
-    // voices[2].pitch = &dsp.fEntry2;
-    // voices[2].gain = &dsp.fVbargraph2;
-    // voices[2].gate = &dsp.fButton2;
+    voices[2].on = false;
+    voices[2].note = 0;
+    voices[2].pitch = &dsp.fEntry2;
+    voices[2].gain = &dsp.fVbargraph2;
+    voices[2].gate = &dsp.fButton2;
 
-    // voices[3].on = false;
-    // voices[3].note = 0;
-    // voices[3].pitch = &dsp.fEntry3;
-    // voices[3].gain = &dsp.fVbargraph3;
-    // voices[3].gate = &dsp.fButton3;
+    voices[3].on = false;
+    voices[3].note = 0;
+    voices[3].pitch = &dsp.fEntry3;
+    voices[3].gain = &dsp.fVbargraph3;
+    voices[3].gate = &dsp.fButton3;
 
-    // voices[4].on = false;
-    // voices[4].note = 0;
-    // voices[4].pitch = &dsp.fEntry4;
-    // voices[4].gain = &dsp.fVbargraph4;
-    // voices[4].gate = &dsp.fButton4;
+    voices[4].on = false;
+    voices[4].note = 0;
+    voices[4].pitch = &dsp.fEntry4;
+    voices[4].gain = &dsp.fVbargraph4;
+    voices[4].gate = &dsp.fButton4;
 
-    // voices[5].on = false;
-    // voices[5].note = 0;
-    // voices[5].pitch = &dsp.fEntry5;
-    // voices[5].gain = &dsp.fVbargraph5;
-    // voices[5].gate = &dsp.fButton5;
+    voices[5].on = false;
+    voices[5].note = 0;
+    voices[5].pitch = &dsp.fEntry5;
+    voices[5].gain = &dsp.fVbargraph5;
+    voices[5].gate = &dsp.fButton5;
 
-    // voices[6].on = false;
-    // voices[6].note = 0;
-    // voices[6].pitch = &dsp.fEntry6;
-    // voices[6].gain = &dsp.fVbargraph6;
-    // voices[6].gate = &dsp.fButton6;
+    voices[6].on = false;
+    voices[6].note = 0;
+    voices[6].pitch = &dsp.fEntry6;
+    voices[6].gain = &dsp.fVbargraph6;
+    voices[6].gate = &dsp.fButton6;
 
-    // voices[7].on = false;
-    // voices[7].note = 0;
-    // voices[7].pitch = &dsp.fEntry7;
-    // voices[7].gain = &dsp.fVbargraph7;
-    // voices[7].gate = &dsp.fButton7;
+    voices[7].on = false;
+    voices[7].note = 0;
+    voices[7].pitch = &dsp.fEntry7;
+    voices[7].gain = &dsp.fVbargraph7;
+    voices[7].gate = &dsp.fButton7;
 
     // dsp.fHslider8 = 1.0f; // resonance
     // dsp.fHslider9 = 2000.0f; // cuttof frequency
