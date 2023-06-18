@@ -30,6 +30,76 @@ void set_filter(uint8_t val);
 static struct bflb_device_s *uart0;
 int ch;
 
+struct UIGlue {
+	struct UIGlue *uiInterface;
+	void (*openVerticalBox)(struct UIGlue *uiInterface, char* key);
+	void (*openHorizontalBox)(struct UIGlue *uiInterface, char* key);
+	void (*closeBox)(struct UIGlue *uiInterface);
+	void (*declare)(struct UIGlue *uiInterface, float *p, const char* key, const char* val);
+
+	void (*addVerticalSlider)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+	void (*addHorizontalSlider)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+	void (*addNumEntry)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+
+	void (*addVerticalBargraph)(struct UIGlue *uiInterface, const char *name, float *p, float f1, float f2);
+	void (*addButton)(struct UIGlue *uiInterface, const char *name, float *p);
+};
+
+struct CC {
+    float *p;
+    float min;
+    float max;
+    float init;
+};
+
+struct CC CCs[127] = {0};
+uint8_t cc_idx = 0;
+
+void extract(const char *name, float *p, float init, float min, float max)
+{
+    for(int i=0; i<127; i++)
+    {
+        struct CC *cc = &CCs[i];
+        if(cc->p == p){
+            cc->min = min;
+            cc->max = max;
+            cc->init = init;
+            break;
+        }
+        printf("failed to find cc for %s", name);
+    }
+}
+
+void *declare(struct UIGlue *uiInterface, float *p, const char* key, const char* val){
+    if(strcmp("midi", key) != 0)
+        return;
+    long num = strtol(val, NULL, 10);
+
+    struct CC *cc = &CCs[num];
+    cc->p = p;
+};
+
+void openVerticalBox(struct UIGlue *uiInterface, char* key){};
+void openHorizontalBox(struct UIGlue *uiInterface, char* key){};
+void *closeBox(struct UIGlue *uiInterface){};
+void *addVerticalBargraph(struct UIGlue *uiInterface, const char *name, float *p, float f1, float f2){};
+void *addButton(struct UIGlue *uiInterface, const char *name, float *p){};
+void *addVerticalSlider(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max);};
+void *addHorizontalSlider(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max);};
+void *addNumEntry(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max);};
+
+struct UIGlue ui_glue = {
+    .openVerticalBox = openVerticalBox,
+    .openHorizontalBox = openHorizontalBox,
+    .closeBox = closeBox,
+    .declare = declare,
+    .addVerticalSlider = addVerticalSlider,
+    .addHorizontalSlider = addHorizontalSlider,
+    .addNumEntry = addNumEntry,
+    .addVerticalBargraph = addVerticalBargraph,
+    .addButton = addButton
+};
+
 void handle_midi(uint8_t *msg, uint8_t len)
 {
     // printf("msg len %d -> %d %d %d\n", len, msg[0], msg[1], msg[2]);
@@ -58,21 +128,32 @@ void handle_midi(uint8_t *msg, uint8_t len)
     }
     case MIDI_CC:
     {
-        uint8_t CC = msg[1] & 0b01111111;
-        uint8_t val = msg[2] & 0b01111111;
-        switch (CC)
+        uint8_t cc_num = msg[1] & 0b01111111;
+        uint8_t cc_val = msg[2] & 0b01111111;
+        // switch (CC)
+        // {
+        // case 1:
+        //     set_filter1(val);
+        //     break;
+        // case 2:
+        //     set_filter2(val);
+        //     break;
+        // case 3:
+        //     set_filter3(val);
+        //     break;
+        // default:
+        //     break;
+        // }
         {
-        case 1:
-            set_filter1(val);
-            break;
-        case 2:
-            set_filter2(val);
-            break;
-        case 3:
-            set_filter3(val);
-            break;
-        default:
-            break;
+            struct CC cc = CCs[cc_num];
+            if(cc.p == 0)
+            {
+                printf("got unknown CC %d", cc_num);
+                break;
+            }
+            float range = cc.max - cc.min;
+            float unit = range / 127;
+            *cc.p = unit * (float)cc_val;
         }
         break;
     }
