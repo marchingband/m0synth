@@ -13,12 +13,14 @@ typedef struct {
 	void (*addNumEntry)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
 
 	void (*addVerticalBargraph)(struct UIGlue *uiInterface, const char *name, float *p, float f1, float f2);
-	void (*addButton)(struct UIGlue *uiInterface, const char *name, float *p)
+	void (*addButton)(struct UIGlue *uiInterface, const char *name, float *p);
 } UIGlue;
 
+typedef void (* metaDeclareFun) (void* ui_interface, const char* key, const char* value);
+
 typedef struct {
-    struct MetaGlue *metaInterface;
-    void (*declare)(struct MetaGlue meta,const char *str1, const char *str2)
+	void* metaInterface;
+    metaDeclareFun declare;
 } MetaGlue;
 
 #endif
