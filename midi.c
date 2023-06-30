@@ -1,6 +1,7 @@
 #include "bflb_mtimer.h"
 #include "bflb_uart.h"
 #include "bflb_gpio.h"
+#include <string.h>
 #include "math.h"
 #include "dsp.h"
 
@@ -54,6 +55,7 @@ struct CC {
     float init;
     float step;
     float mul;
+    char name[20];
 };
 
 struct CC CCs[127] = {0};
@@ -74,6 +76,7 @@ void extract(const char *name, float *p, float init, float min, float max, float
             float steps = (max - min) / step;
             float per = steps / 127.0;
             cc->mul = per;
+            strcpy(cc->name, name);
             break;
         }
         printf("failed to find cc for %s", name);
@@ -149,7 +152,9 @@ void handle_midi(uint8_t *msg, uint8_t len)
             }
             float steps = cc.mul * (float)cc_val;
             int whole_steps = round(steps);
-            *cc.p = cc.step * whole_steps;
+            float val = cc.step * whole_steps;
+            *cc.p = val;
+            printf("cc%-2d::%12f -> %s", val, cc.name );
         }
         break;
     }
