@@ -2,23 +2,23 @@
 #define DSP_H
 
 typedef struct {
-	struct UIGlue *uiInterface;
-	void (*openVerticalBox)(struct UIGlue *uiInterface, char* key);
-	void (*openHorizontalBox)(struct UIGlue *uiInterface, char* key);
-	void (*closeBox)(struct UIGlue *uiInterface);
-	void (*declare)(struct UIGlue *uiInterface, float *p, const char* key, const char* val);
+	UIGlue *uiInterface;
+	void (*openVerticalBox)( UIGlue *uiInterface, char* key);
+	void (*openHorizontalBox)( UIGlue *uiInterface, char* key);
+	void (*closeBox)( UIGlue *uiInterface);
+	void (*declare)( UIGlue *uiInterface, float *p, const char* key, const char* val);
 
-	void (*addVerticalSlider)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
-	void (*addHorizontalSlider)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
-	void (*addNumEntry)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+	void (*addVerticalSlider)( UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+	void (*addHorizontalSlider)( UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+	void (*addNumEntry)( UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
 
-	void (*addVerticalBargraph)(struct UIGlue *uiInterface, const char *name, float *p, float f1, float f2);
-	void (*addButton)(struct UIGlue *uiInterface, const char *name, float *p);
+	void (*addVerticalBargraph)( UIGlue *uiInterface, const char *name, float *p, float f1, float f2);
+	void (*addButton)( UIGlue *uiInterface, const char *name, float *p)
 } UIGlue;
 
 typedef struct {
     MetaGlue *metaInterface;
-    void (*declare)(MetaGlue,const char *str1, const char *str2);
+    void (*declare)(MetaGlue meta,const char *str1, const char *str2)
 } MetaGlue;
 
 #endif
