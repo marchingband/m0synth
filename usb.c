@@ -126,7 +126,7 @@ void usbh_cdc_acm_callback(void *arg, int nbytes)
         // {
         //     USB_LOG_RAW("0x%02x ", midi_buffer[i]);
         // }
-        USB_LOG_RAW("nbytes:%d\r\n", nbytes);
+        // USB_LOG_RAW("nbytes:%d\r\n", nbytes);
         for (int i=0; i< nbytes; i+=4)
         {
             if(midi_buffer[i] == 0x00)

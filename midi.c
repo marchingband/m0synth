@@ -147,14 +147,14 @@ void handle_midi(uint8_t *msg, uint8_t len)
             struct CC cc = CCs[cc_num];
             if(cc.p == 0)
             {
-                printf("got unknown CC %d", cc_num);
+                printf("got unknown CC %d\n", cc_num);
                 break;
             }
             float steps = cc.mul * (float)cc_val;
             int whole_steps = round(steps);
-            float val = cc.step * whole_steps;
+            float val = (cc.step * whole_steps) + cc.min;
             *cc.p = val;
-            printf("cc%-2d::%12f -> %s", val, cc.name );
+            printf("cc%-2d::%12f -> %s\n", cc_num, val, cc.name );
         }
         break;
     }
