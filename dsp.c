@@ -5,13 +5,21 @@
 #include <stdlib.h>
 
 #include "bflb_mtimer.h"
+#include "dsp.h"
 
 // #include "square-diode-lfo.h"
 // #include "square-diode.h"
 #include "moog-poly-8.h"
 // #include "moog-poly-8-verb.h"
 
-#define NUM_VOICES 8
+#define NUM_VOICES 1
+
+// from midi.c
+void extract(const char *name, float *p, float init, float min, float max, float step);
+void *declare(UIGlue *uiInterface, float *p, const char* key, const char* val);
+
+// from the dsp .h file
+void buildUserInterfacemydsp(mydsp* dsp, UIGlue* ui_interface);
 
 struct voice_s
 {
@@ -90,13 +98,36 @@ mydsp dsp;
 float *buf[1];
 size_t buf_len;
 
+void openVerticalBox(UIGlue *uiInterface, char* key){};
+void openHorizontalBox(UIGlue *uiInterface, char* key){};
+void *closeBox(UIGlue *uiInterface){};
+void *addVerticalBargraph(UIGlue *uiInterface, const char *name, float *p, float f1, float f2){};
+void *addButton(UIGlue *uiInterface, const char *name, float *p){extract(name, p, 0, 0, 0, 0);};
+void *addVerticalSlider(UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max, step);};
+void *addHorizontalSlider(UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max, step);};
+void *addNumEntry(UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max, step);};
+
+UIGlue ui_glue = {
+    .openVerticalBox = openVerticalBox,
+    .openHorizontalBox = openHorizontalBox,
+    .closeBox = closeBox,
+    .declare = declare,
+    .addVerticalSlider = addVerticalSlider,
+    .addHorizontalSlider = addHorizontalSlider,
+    .addNumEntry = addNumEntry,
+    .addVerticalBargraph = addVerticalBargraph,
+    .addButton = addButton
+};
+
 void dsp_init(size_t buf_size)
 {
     size_t cnt = buf_size / 2;
     initmydsp(&dsp, 32000);
+    buildUserInterfacemydsp(&dsp, &ui_glue);
     buf[0] = (float *)malloc(cnt * sizeof(float));
     buf_len = cnt;
 
+#ifdef POLY_MODE
     voices[0].on = false;
     voices[0].note = 0;
     voices[0].pitch = &dsp.fEntry0;
@@ -154,6 +185,7 @@ void dsp_init(size_t buf_size)
     // dsp.fButton3 = 1.0f;
     // dsp.fButton4 = 1.0f;
     // dsp.fButton5 = 1.0f;
+#endif
 }
 
 int last_start = 0;
@@ -185,6 +217,7 @@ void dsp_run(int16_t *dest)
 
 void play(uint8_t note)
 {
+#ifdef POLY_MODE
     int ret = get_next_voice(note);
     if (ret == -1)
     {
@@ -196,10 +229,14 @@ void play(uint8_t note)
     voices[ret].note = note;
     *voices[ret].pitch = hz;
     *voices[ret].gate = 1.0f;
+    return;
+#endif
+
 }
 
 void stop(uint8_t note)
 {
+#ifdef POLY_MODE
     for (int i = 0; i < NUM_VOICES; i++)
     {
         if (voices[i].note == note)
@@ -208,6 +245,9 @@ void stop(uint8_t note)
             *voices[i].gate = 0.0f;
         }
     }
+    return;
+#endif
+
 }
 
 // void set_note(uint8_t note){

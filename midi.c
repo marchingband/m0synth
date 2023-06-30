@@ -1,6 +1,8 @@
 #include "bflb_mtimer.h"
 #include "bflb_uart.h"
 #include "bflb_gpio.h"
+#include "math.h"
+#include "dsp.h"
 
 #define MIDI_NOTE_OFF 8
 #define MIDI_NOTE_ON 9
@@ -30,33 +32,37 @@ void set_filter(uint8_t val);
 static struct bflb_device_s *uart0;
 int ch;
 
-struct UIGlue {
-	struct UIGlue *uiInterface;
-	void (*openVerticalBox)(struct UIGlue *uiInterface, char* key);
-	void (*openHorizontalBox)(struct UIGlue *uiInterface, char* key);
-	void (*closeBox)(struct UIGlue *uiInterface);
-	void (*declare)(struct UIGlue *uiInterface, float *p, const char* key, const char* val);
+// UIGlue {
+// 	UIGlue *uiInterface;
+// 	void (*openVerticalBox)(UIGlue *uiInterface, char* key);
+// 	void (*openHorizontalBox)(UIGlue *uiInterface, char* key);
+// 	void (*closeBox)(UIGlue *uiInterface);
+// 	void (*declare)(UIGlue *uiInterface, float *p, const char* key, const char* val);
 
-	void (*addVerticalSlider)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
-	void (*addHorizontalSlider)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
-	void (*addNumEntry)(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+// 	void (*addVerticalSlider)(UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+// 	void (*addHorizontalSlider)(UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
+// 	void (*addNumEntry)(UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step);
 
-	void (*addVerticalBargraph)(struct UIGlue *uiInterface, const char *name, float *p, float f1, float f2);
-	void (*addButton)(struct UIGlue *uiInterface, const char *name, float *p);
-};
+// 	void (*addVerticalBargraph)(UIGlue *uiInterface, const char *name, float *p, float f1, float f2);
+// 	void (*addButton)(UIGlue *uiInterface, const char *name, float *p);
+// };
 
 struct CC {
     float *p;
     float min;
     float max;
     float init;
+    float step;
+    float mul;
 };
 
 struct CC CCs[127] = {0};
-uint8_t cc_idx = 0;
+float *pitch = 0;
+float *gate = 0;
 
-void extract(const char *name, float *p, float init, float min, float max)
+void extract(const char *name, float *p, float init, float min, float max, float step)
 {
+    // we can ignore the pitch and gate, and just calibrate for CC's
     for(int i=0; i<127; i++)
     {
         struct CC *cc = &CCs[i];
@@ -64,40 +70,41 @@ void extract(const char *name, float *p, float init, float min, float max)
             cc->min = min;
             cc->max = max;
             cc->init = init;
+            cc->step = step;
+            float steps = (max - min) / step;
+            float per = steps / 127.0;
+            cc->mul = per;
             break;
         }
         printf("failed to find cc for %s", name);
+        /*
+
+        set = out / per (round)
+        
+        min 0 | max 100 | step 1   | steps 100  | per 0.787 | in 65 | out 51.155
+        min 0 | max 100 | step 0.1 | steps 1000 | per 7.87  | in 65 | out 51.155
+        min 0 | max 2   | step 1   | steps 2    | per 0.015 | in 65 | out 1.02
+        
+        */
     }
 }
 
-void *declare(struct UIGlue *uiInterface, float *p, const char* key, const char* val){
-    if(strcmp("midi", key) != 0)
-        return;
-    long num = strtol(val, NULL, 10);
+void *declare(UIGlue *uiInterface, float *p, const char* key, const char* val){
+    if(strcmp("midi", key) == 0) // its a cc
+    {
+        long num = strtol(val, NULL, 10);
 
-    struct CC *cc = &CCs[num];
-    cc->p = p;
-};
-
-void openVerticalBox(struct UIGlue *uiInterface, char* key){};
-void openHorizontalBox(struct UIGlue *uiInterface, char* key){};
-void *closeBox(struct UIGlue *uiInterface){};
-void *addVerticalBargraph(struct UIGlue *uiInterface, const char *name, float *p, float f1, float f2){};
-void *addButton(struct UIGlue *uiInterface, const char *name, float *p){};
-void *addVerticalSlider(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max);};
-void *addHorizontalSlider(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max);};
-void *addNumEntry(struct UIGlue *uiInterface, const char *name, float *p, float init, float min, float max, float step){extract(name, p, init, min, max);};
-
-struct UIGlue ui_glue = {
-    .openVerticalBox = openVerticalBox,
-    .openHorizontalBox = openHorizontalBox,
-    .closeBox = closeBox,
-    .declare = declare,
-    .addVerticalSlider = addVerticalSlider,
-    .addHorizontalSlider = addHorizontalSlider,
-    .addNumEntry = addNumEntry,
-    .addVerticalBargraph = addVerticalBargraph,
-    .addButton = addButton
+        struct CC *cc = &CCs[num];
+        cc->p = p;
+    }
+    else if(strcmp("pitch", key) == 0) // its the pitch
+    {
+        pitch = p;
+    }
+    else if(strcmp("gate", key) == 0) // its the gate
+    {
+        gate = p;
+    }
 };
 
 void handle_midi(uint8_t *msg, uint8_t len)
@@ -112,13 +119,16 @@ void handle_midi(uint8_t *msg, uint8_t len)
         uint8_t note = msg[1] & 0b01111111;
         // uint8_t velocity = msg[2] & 0b01111111;
         // set_note(note);
-        play(note);
+        // play(note);
+        *gate = 1;
+        *pitch = note; // the dsp converts to hz
         break;
     }
     case MIDI_NOTE_OFF:
     {
         uint8_t note = msg[1] & 0b01111111;
-        stop(note);
+        // stop(note);
+        *gate = 0;
         break;
     }
     case MIDI_PROGRAM_CHANGE:
@@ -130,20 +140,6 @@ void handle_midi(uint8_t *msg, uint8_t len)
     {
         uint8_t cc_num = msg[1] & 0b01111111;
         uint8_t cc_val = msg[2] & 0b01111111;
-        // switch (CC)
-        // {
-        // case 1:
-        //     set_filter1(val);
-        //     break;
-        // case 2:
-        //     set_filter2(val);
-        //     break;
-        // case 3:
-        //     set_filter3(val);
-        //     break;
-        // default:
-        //     break;
-        // }
         {
             struct CC cc = CCs[cc_num];
             if(cc.p == 0)
@@ -151,9 +147,9 @@ void handle_midi(uint8_t *msg, uint8_t len)
                 printf("got unknown CC %d", cc_num);
                 break;
             }
-            float range = cc.max - cc.min;
-            float unit = range / 127;
-            *cc.p = unit * (float)cc_val;
+            float steps = cc.mul * (float)cc_val;
+            int whole_steps = round(steps);
+            *cc.p = cc.step * whole_steps;
         }
         break;
     }
