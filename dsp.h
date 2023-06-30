@@ -17,8 +17,8 @@ typedef struct {
 } UIGlue;
 
 typedef struct {
-    MetaGlue *metaInterface;
-    void (*declare)(MetaGlue meta,const char *str1, const char *str2)
+    struct MetaGlue *metaInterface;
+    void (*declare)(struct MetaGlue meta,const char *str1, const char *str2)
 } MetaGlue;
 
 #endif
