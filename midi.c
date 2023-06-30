@@ -79,7 +79,7 @@ void extract(const char *name, float *p, float init, float min, float max, float
             strcpy(cc->name, name);
             break;
         }
-        printf("failed to find cc for %s", name);
+        printf("failed to find cc for %s\n", name);
         /*
 
         set = out / per (round)
