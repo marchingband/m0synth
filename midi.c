@@ -154,7 +154,7 @@ void handle_midi(uint8_t *msg, uint8_t len)
             int whole_steps = round(steps);
             float val = (cc.step * whole_steps) + cc.min;
             *cc.p = val;
-            printf("cc%-2d::%12f -> %s\n", cc_num, val, cc.name );
+            // printf("cc%-2d::%12f -> %s\n", cc_num, val, cc.name );
         }
         break;
     }
