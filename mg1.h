@@ -130,7 +130,7 @@ void metadatamydsp(MetaGlue* m) {
 	m->declare(m->metaInterface, "envelopes.lib/name", "Faust Envelope Library");
 	m->declare(m->metaInterface, "envelopes.lib/version", "0.2");
 	m->declare(m->metaInterface, "filename", "mg1.dsp");
-	m->declare(m->metaInterface, "filters.lib/lowpass0_highpass1", "MIT-style STK-4.3 license");
+	m->declare(m->metaInterface, "filters.lib/lowpass0_highpass1", "Copyright (C) 2003-2019 by Julius O. Smith III <jos@ccrma.stanford.edu>");
 	m->declare(m->metaInterface, "filters.lib/name", "Faust Filters Library");
 	m->declare(m->metaInterface, "filters.lib/pole:author", "Julius O. Smith III");
 	m->declare(m->metaInterface, "filters.lib/pole:copyright", "Copyright (C) 2003-2019 by Julius O. Smith III <jos@ccrma.stanford.edu>");
@@ -463,7 +463,7 @@ void buildUserInterfacemydsp(mydsp* dsp, UIGlue* ui_interface) {
 	ui_interface->declare(ui_interface->uiInterface, &dsp->fButton0, "gate", "");
 	ui_interface->addButton(ui_interface->uiInterface, "gate", &dsp->fButton0);
 	ui_interface->declare(ui_interface->uiInterface, &dsp->fHslider10, "midi", "5");
-	ui_interface->addHorizontalSlider(ui_interface->uiInterface, "glide", &dsp->fHslider10, (FAUSTFLOAT)0.5f, (FAUSTFLOAT)0.0f, (FAUSTFLOAT)0.999f, (FAUSTFLOAT)0.001f);
+	ui_interface->addHorizontalSlider(ui_interface->uiInterface, "glide", &dsp->fHslider10, (FAUSTFLOAT)0.5f, (FAUSTFLOAT)0.0f, (FAUSTFLOAT)0.9999f, (FAUSTFLOAT)0.0001f);
 	ui_interface->declare(ui_interface->uiInterface, &dsp->fHslider12, "midi", "8");
 	ui_interface->addHorizontalSlider(ui_interface->uiInterface, "lfo->pitch", &dsp->fHslider12, (FAUSTFLOAT)0.0f, (FAUSTFLOAT)0.0f, (FAUSTFLOAT)1.0f, (FAUSTFLOAT)0.001f);
 	ui_interface->declare(ui_interface->uiInterface, &dsp->fHslider2, "midi", "9");
@@ -567,7 +567,7 @@ void computemydsp(mydsp* dsp, int count, FAUSTFLOAT** RESTRICT inputs, FAUSTFLOA
 			float fTemp23 = fmaxf(0.0f, fminf(2047.0f, dsp->fConst7 / fTemp18));
 			int iTemp24 = (int)(fTemp23);
 			float fTemp25 = floorf(fTemp23);
-			float fTemp26 = dsp->fConst6 * (fTemp22 - dsp->fVec4[(dsp->IOTA0 - iTemp24) & 4095] * (fTemp25 + (1.0f - fTemp23)) - (fTemp23 - fTemp25) * dsp->fVec4[(dsp->IOTA0 - (iTemp24 + 1)) & 4095]);
+			float fTemp26 = 0.0f - dsp->fConst6 * (dsp->fVec4[(dsp->IOTA0 - iTemp24) & 4095] * (fTemp25 + (1.0f - fTemp23)) - fTemp22 + (fTemp23 - fTemp25) * dsp->fVec4[(dsp->IOTA0 - (iTemp24 + 1)) & 4095]);
 			float fTemp27 = fmaxf(2e+01f, fabsf(dsp->fRec14[0]));
 			float fTemp28 = ((iTemp0) ? 0.0f : dsp->fRec15[1] + dsp->fConst3 * fTemp27);
 			dsp->fRec15[0] = fTemp28 - floorf(fTemp28);
