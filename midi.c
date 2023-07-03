@@ -122,7 +122,10 @@ void handle_midi(uint8_t *msg, uint8_t len)
     {
         uint8_t note = msg[1] & 0b01111111;
         // stop(note);
-        *gate = 0;
+        if(*pitch == note)
+        {
+            *gate = 0;
+        }
         break;
     }
     case MIDI_PROGRAM_CHANGE:
