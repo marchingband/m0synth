@@ -77,19 +77,10 @@ void extract(const char *name, float *p, float init, float min, float max, float
             float per = steps / 127.0;
             cc->mul = per;
             strcpy(cc->name, name);
-            break;
+            return;
         }
-        printf("failed to find cc for %s\n", name);
-        /*
-
-        set = out / per (round)
-        
-        min 0 | max 100 | step 1   | steps 100  | per 0.787 | in 65 | out 51.155
-        min 0 | max 100 | step 0.1 | steps 1000 | per 7.87  | in 65 | out 51.155
-        min 0 | max 2   | step 1   | steps 2    | per 0.015 | in 65 | out 1.02
-        
-        */
     }
+    printf("failed to find cc for %s\n", name);
 }
 
 void *declare(UIGlue *uiInterface, float *p, const char* key, const char* val){
