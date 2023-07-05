@@ -16,7 +16,7 @@ struct bflb_timer_config_s cfg;
 
 uint8_t white[3] = {127, 127, 127};
 uint32_t color = 0;
-uint8_t sig[NUM_BIT_BITS] = {0};
+uint8_t rgb_sig[NUM_BIT_BITS] = {0};
 
 size_t p = 0;
 
@@ -35,6 +35,7 @@ void rgb_led_init(){
 
     gpio = bflb_device_get_by_name("gpio");
     bflb_gpio_init(gpio, LED_GPIO, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
+    bflb_gpio_reset(gpio, LED_GPIO);
 }
 
 void timer0_isr(int irq, void *arg)
@@ -44,9 +45,9 @@ void timer0_isr(int irq, void *arg)
         bflb_timer_compint_clear(timer0, TIMER_COMP_ID_0);
         if(p < NUM_BIT_BITS)
         {
-            uint32_t val = sig[p];
+            uint32_t val = rgb_sig[p];
             p += 1;
-            if(p == 0)
+            if(val == 0)
             {
                 bflb_gpio_reset(gpio, LED_GPIO);
             }
@@ -75,22 +76,22 @@ void rgb_send_color(void){
         int pos = i * 3;
         if( bit == 0 )
         {
-            sig[pos]     = 1;
-            sig[pos + 1] = 0;
-            sig[pos + 2] = 0;
+            rgb_sig[pos]     = 1;
+            rgb_sig[pos + 1] = 0;
+            rgb_sig[pos + 2] = 0;
         }
         else
         {
-            sig[pos]     = 1;
-            sig[pos + 1] = 1;
-            sig[pos + 2] = 0;
+            rgb_sig[pos]     = 1;
+            rgb_sig[pos + 1] = 1;
+            rgb_sig[pos + 2] = 0;
         }
     }
 
     // log the array
     for(int i=0; i< NUM_BIT_BITS; i++)
     {
-        printf("| %s ", sig[i] ? 1 : 0);
+        printf("| %d ", rgb_sig[i]);
     }
     printf("/n");
 
