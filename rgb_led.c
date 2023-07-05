@@ -4,7 +4,7 @@
 
 #include "board.h"
 
-#define RGB_CLOCK_DIV 1
+#define RGB_CLOCK_DIV 14
 #define LED_GPIO GPIO_PIN_10
 
 #define NUM_BIT_BITS (24 * 3)
@@ -27,8 +27,8 @@ void rgb_led_init(){
     cfg.counter_mode = TIMER_COUNTER_MODE_PROLOAD;
     cfg.clock_source = TIMER_CLKSRC_NO;
     cfg.clock_div = RGB_CLOCK_DIV;
-    cfg.trigger_comp_id = TIMER_COMP_ID_0;
-    cfg.comp0_val = 13;
+    cfg.trigger_comp_id = TIMER_COMP_ID_2;
+    cfg.comp0_val = 1;
     cfg.preload_val = 0;
     cfg.clock_source = TIMER_CLKSRC_XTAL;
     bflb_timer_init(timer0, &cfg);
@@ -40,9 +40,9 @@ void rgb_led_init(){
 
 void timer0_isr(int irq, void *arg)
 {
-    bool status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_0);
+    bool status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_2);
     if (status) {
-        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_0);
+        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_2);
         if(p < NUM_BIT_BITS)
         {
             uint32_t val = rgb_sig[p];
