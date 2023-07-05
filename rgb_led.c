@@ -5,6 +5,7 @@
 #include "board.h"
 
 #define NUM_BIT_BITS (24 * 3)
+#define LED_GPIO GPIO_PIN_10
 
 struct bflb_device_s *timer0;
 struct bflb_device_s *gpio;
@@ -31,7 +32,7 @@ void rgb_led_init(){
     bflb_timer_init(timer0, &cfg);
 
     gpio = bflb_device_get_by_name("gpio");
-    bflb_gpio_init(gpio, GPIO_PIN_0, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
+    bflb_gpio_init(gpio, LED_GPIO, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
 }
 
 void timer0_isr(int irq, void *arg)
@@ -43,12 +44,22 @@ void timer0_isr(int irq, void *arg)
         {
             uint32_t val = sig[p];
             p += 1;
+            if(p == 0)
+            {
+                bflb_gpio_reset(gpio, LED_GPIO);
+            }
+            else
+            {
+                bflb_gpio_set(gpio, LED_GPIO);
+            }
         }
         else
         {
             p = 0;
             bflb_timer_stop(timer0);
             bflb_irq_disable(timer0->irq_num);
+            bflb_gpio_reset(gpio, LED_GPIO);
+            bflb_mtimer_delay_us(90);
         }
     }
 }
@@ -77,7 +88,7 @@ void rgb_send_color(void){
     bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
     bflb_irq_enable(timer0->irq_num);
     bflb_timer_start(timer0);
-    bflb_mtimer_delay_us(90);
+    
 }
 
 void rgb_led_white(){
