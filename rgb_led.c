@@ -4,7 +4,7 @@
 
 #include "board.h"
 
-#define RGB_CLOCK_DIV 12
+#define RGB_CLOCK_DIV 13
 #define LED_GPIO GPIO_PIN_10
 
 #define NUM_BIT_BITS (24 * 3)
@@ -91,9 +91,9 @@ void rgb_send_color(void){
     // log the array
     for(int i=0; i< NUM_BIT_BITS; i++)
     {
-        printf("| %d ", rgb_sig[i]);
+        printf("|%d", rgb_sig[i]);
     }
-    printf("/n");
+    printf("\n");
 
     // start the transfer
     bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
