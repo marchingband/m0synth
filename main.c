@@ -18,6 +18,8 @@
 #include "usbh_core.h"
 #include <FreeRTOS.h>
 
+#include "rgb_led.h"
+
 void dsp_run(int16_t *dest);
 void dsp_init(size_t buf_size);
 void uart_receive_init(void);
@@ -261,41 +263,46 @@ int main(void)
     /* board init */
     board_init();
 
-    /* start usb */
-    printf("Starting usb host task...\r\n");
-    usbh_initialize();
+    /* initialize rgb driver */
+    rgb_led_init();
 
-    /* dsp init */
-    dsp_init(BUF_SIZE);
+    // /* start usb */
+    // printf("Starting usb host task...\r\n");
+    // usbh_initialize();
 
-    /* gpio init */
-    audac_gpio_init();
+    // /* dsp init */
+    // dsp_init(BUF_SIZE);
 
-    /* adc init */
-    // adc_init();
+    // /* gpio init */
+    // audac_gpio_init();
 
-    /* audac init */
-    audac_init();
+    // /* adc init */
+    // // adc_init();
 
-    /* dma init */
-    audac_dma_init();
-    bflb_dma_channel_start(audac_dma_hd);
+    // /* audac init */
+    // audac_init();
 
-    /* audac start */
-    bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
+    // /* dma init */
+    // audac_dma_init();
+    // bflb_dma_channel_start(audac_dma_hd);
 
-    /* uart midi */
-    uart_receive_init();
+    // /* audac start */
+    // bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
 
-    /* usb midi host */
-    usb_midi_start();
+    // /* uart midi */
+    // uart_receive_init();
 
-    vTaskStartScheduler();
+    // /* usb midi host */
+    // usb_midi_start();
 
-    // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
-    // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
-    // int cnt = 0;
-    // bool bench = true;
+    // vTaskStartScheduler();
+
+    // // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
+    // // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
+    // // int cnt = 0;
+    // // bool bench = true;
+
+    
     while (1)
     {
         // uint64_t start = bflb_mtimer_get_time_us();
@@ -308,5 +315,7 @@ int main(void)
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
+        bflb_mtimer_delay_ms(1000);
+        rgb_led_white();
     }
 }

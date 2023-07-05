@@ -7,6 +7,7 @@
 
 #define MIDI_NOTE_OFF 8
 #define MIDI_NOTE_ON 9
+#define MIDI_PITCH_BEND 0xE
 #define MIDI_PROGRAM_CHANGE 12
 #define MIDI_CC 11
 #define MIDI_CC_VOLUME 7
@@ -58,9 +59,22 @@ struct CC {
     char name[20];
 };
 
+#define NUM_SEL 20
+
+struct Sel {
+    float *p;
+    float min;
+    float max;
+    float init;
+    char name[20];
+};
+
 struct CC CCs[127] = {0};
+struct Sel Sels[NUM_SEL] = {0};
 float *pitch = 0;
 float *gate = 0;
+float *pitch_bend = 0;
+float pitch_bend_constant = 100.0 / 8192.0;
 
 void extract(const char *name, float *p, float init, float min, float max, float step)
 {
@@ -80,6 +94,19 @@ void extract(const char *name, float *p, float init, float min, float max, float
             return;
         }
     }
+
+    for(int i=0; i<NUM_SEL; i++)
+    {
+        struct Sel *sel = &Sels[i];
+        if(sel->p == p){
+            sel->min = min;
+            sel->max = max;
+            sel->init = init;
+            strcpy(sel->name, name);
+            return;
+        }
+    }
+
     printf("failed to find cc for %s\n", name);
 }
 
@@ -91,6 +118,13 @@ void *declare(UIGlue *uiInterface, float *p, const char* key, const char* val){
         struct CC *cc = &CCs[num];
         cc->p = p;
     }
+    else if(strcmp("sel", key) == 0) // its a selection toggle
+    {
+        long num = strtol(val, NULL, 10);
+
+        struct Sel *sel = &Sels[num];
+        sel->p = p;
+    }
     else if(strcmp("pitch", key) == 0) // its the pitch
     {
         pitch = p;
@@ -98,6 +132,10 @@ void *declare(UIGlue *uiInterface, float *p, const char* key, const char* val){
     else if(strcmp("gate", key) == 0) // its the gate
     {
         gate = p;
+    }
+    else if(strcmp("pitch_bend", key) == 0) // its the gate
+    {
+        pitch_bend = p;
     }
 };
 
@@ -111,11 +149,20 @@ void handle_midi(uint8_t *msg, uint8_t len)
     case MIDI_NOTE_ON:
     {
         uint8_t note = msg[1] & 0b01111111;
-        // uint8_t velocity = msg[2] & 0b01111111;
-        // set_note(note);
-        // play(note);
-        *gate = 1;
-        *pitch = note; // the dsp converts to hz
+        if(note < NUM_SEL)
+        {
+            struct Sel *sel = &Sels[note];
+            int next = *sel->p + 1;
+            *sel->p = next > sel->max ? 0 : next;
+        }
+        else
+        {
+            // uint8_t velocity = msg[2] & 0b01111111;
+            // set_note(note);
+            // play(note);
+            *gate = 1;
+            *pitch = note; // the dsp converts to hz
+        }
         break;
     }
     case MIDI_NOTE_OFF:
@@ -151,6 +198,12 @@ void handle_midi(uint8_t *msg, uint8_t len)
             // printf("cc%-2d::%12f -> %s\n", cc_num, val, cc.name );
         }
         break;
+    }
+    case MIDI_PITCH_BEND:
+    {
+        uint16_t val = msg[1] | (msg[2] << 7);  // 0 to 16,383
+        int16_t bend = val - 8192; // +/- 8192
+        *pitch_bend = (float)bend * pitch_bend_constant;
     }
     default:
         break;
