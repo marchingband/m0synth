@@ -4,7 +4,7 @@
 
 #include "board.h"
 
-#define RGB_CLOCK_DIV 0
+#define RGB_CLOCK_DIV 1
 #define LED_GPIO GPIO_PIN_10
 
 #define NUM_BIT_BITS (24 * 3)
