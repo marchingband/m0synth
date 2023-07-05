@@ -4,8 +4,10 @@
 
 #include "board.h"
 
-#define NUM_BIT_BITS (24 * 3)
+#define RGB_CLOCK_DIV 12
 #define LED_GPIO GPIO_PIN_10
+
+#define NUM_BIT_BITS (24 * 3)
 
 struct bflb_device_s *timer0;
 struct bflb_device_s *gpio;
@@ -24,7 +26,7 @@ void rgb_led_init(){
     /* timer clk = clock_source/(div + 1)*/
     cfg.counter_mode = TIMER_COUNTER_MODE_PROLOAD;
     cfg.clock_source = TIMER_CLKSRC_NO;
-    cfg.clock_div = 12;
+    cfg.clock_div = RGB_CLOCK_DIV;
     cfg.trigger_comp_id = TIMER_COMP_ID_0;
     cfg.comp0_val = 1;
     cfg.preload_val = 0;
@@ -60,6 +62,7 @@ void timer0_isr(int irq, void *arg)
             bflb_irq_disable(timer0->irq_num);
             bflb_gpio_reset(gpio, LED_GPIO);
             bflb_mtimer_delay_us(90);
+            printf("done\n\n");
         }
     }
 }
@@ -84,6 +87,13 @@ void rgb_send_color(void){
         }
     }
 
+    // log the array
+    for(int i=0; i< NUM_BIT_BITS; i++)
+    {
+        printf("| %s ", sig[i] ? 1 : 0);
+    }
+    printf("/n");
+
     // start the transfer
     bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
     bflb_irq_enable(timer0->irq_num);
@@ -92,6 +102,7 @@ void rgb_send_color(void){
 }
 
 void rgb_led_white(){
+    printf("send white\n");
     color = (white[0]) | (white[1] << 8) | (white[2] << 16);
     rgb_send_color();
 }
