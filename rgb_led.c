@@ -5,7 +5,7 @@
 #include "board.h"
 
 // #define RGB_CLOCK_DIV 39
-#define RGB_CLOCK_DIV 12
+#define RGB_CLOCK_DIV 0
 #define LED_GPIO GPIO_PIN_10
 #define RGB_TIMER_COMP_ID TIMER_COMP_ID_0
 
@@ -31,7 +31,7 @@ void rgb_led_init(){
     cfg.clock_source = TIMER_CLKSRC_XTAL;
     cfg.clock_div = RGB_CLOCK_DIV;
     cfg.trigger_comp_id = RGB_TIMER_COMP_ID;
-    cfg.comp0_val = 1000;
+    cfg.comp0_val = 13;
     // cfg.comp1_val = 2000000;
     // cfg.comp2_val = 3000000;
     cfg.preload_val = 0;
