@@ -7,7 +7,7 @@
 #define RGB_CLOCK_DIV 39
 // #define RGB_CLOCK_DIV 14
 #define LED_GPIO GPIO_PIN_10
-#define RGB_TIMER_COMP_ID TIMER_COMP_ID_0
+#define RGB_TIMER_COMP_ID TIMER_COMP_ID_2
 
 #define NUM_BIT_BITS (24 * 3)
 
@@ -38,9 +38,9 @@ void rgb_led_init(){
     cfg.preload_val = 0;
     bflb_timer_init(timer0, &cfg);
 
-    gpio = bflb_device_get_by_name("gpio");
-    bflb_gpio_init(gpio, LED_GPIO, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
-    bflb_gpio_reset(gpio, LED_GPIO);
+    // gpio = bflb_device_get_by_name("gpio");
+    // bflb_gpio_init(gpio, LED_GPIO, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
+    // bflb_gpio_reset(gpio, LED_GPIO);
 }
 
 void timer0_isr(int irq, void *arg)
