@@ -343,7 +343,7 @@ void timer0_isr(int irq, void *arg)
     }
     status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_2);
     if (status) {
-        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_2);
+        // bflb_timer_compint_clear(timer0, TIMER_COMP_ID_2);
         printf("timer0 comp2 trigger\r\n");
     }
 }
