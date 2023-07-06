@@ -84,30 +84,30 @@ void timer0_isr(int irq, void *arg)
 
 void rgb_send_color(void){
     // print the array
-    for(int i=0; i<24; i++)
-    {
-        int bit = (color >> i) & 0x1;
-        int pos = i * 3;
-        if( bit == 0 )
-        {
-            rgb_sig[pos]     = 1;
-            rgb_sig[pos + 1] = 0;
-            rgb_sig[pos + 2] = 0;
-        }
-        else
-        {
-            rgb_sig[pos]     = 1;
-            rgb_sig[pos + 1] = 1;
-            rgb_sig[pos + 2] = 0;
-        }
-    }
+    // for(int i=0; i<24; i++)
+    // {
+    //     int bit = (color >> i) & 0x1;
+    //     int pos = i * 3;
+    //     if( bit == 0 )
+    //     {
+    //         rgb_sig[pos]     = 1;
+    //         rgb_sig[pos + 1] = 0;
+    //         rgb_sig[pos + 2] = 0;
+    //     }
+    //     else
+    //     {
+    //         rgb_sig[pos]     = 1;
+    //         rgb_sig[pos + 1] = 1;
+    //         rgb_sig[pos + 2] = 0;
+    //     }
+    // }
 
-    // log the array
-    for(int i=0; i< NUM_BIT_BITS; i++)
-    {
-        printf("|%d", rgb_sig[i]);
-    }
-    printf("\n");
+    // // log the array
+    // for(int i=0; i< NUM_BIT_BITS; i++)
+    // {
+    //     printf("|%d", rgb_sig[i]);
+    // }
+    // printf("\n");
 
     // start the transfer
     bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
@@ -117,8 +117,8 @@ void rgb_send_color(void){
 }
 
 void rgb_led_white(){
-    printf("send white\n");
-    color = (white[0]) | (white[1] << 8) | (white[2] << 16);
+    // printf("send white\n");
+    // color = (white[0]) | (white[1] << 8) | (white[2] << 16);
     rgb_send_color();
 }
 
