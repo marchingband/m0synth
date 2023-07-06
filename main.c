@@ -394,7 +394,7 @@ int main(void)
     cfg1.comp2_val = 2500000; /* match value 2 */
     cfg1.preload_val = 0;    /* preload value */
 
-    _timer0 = bflb_device_get_by_name("_timer0");
+    _timer0 = bflb_device_get_by_name("timer0");
     timer1 = bflb_device_get_by_name("timer1");
 
     /* Timer init with default configuration */
