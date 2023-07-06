@@ -111,8 +111,8 @@ void rgb_send_color(void){
     // printf("\n");
 
     // start the transfer
-    // bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
-    // bflb_irq_enable(timer0->irq_num);
+    bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
+    bflb_irq_enable(timer0->irq_num);
     bflb_timer_start(timer0);
     
 }
