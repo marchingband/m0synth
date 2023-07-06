@@ -300,7 +300,7 @@ int main(void)
     // // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
     // // int cnt = 0;
     // // bool bench = true;
-    rgb_led_white();
+    // rgb_led_white();
     vTaskStartScheduler();
     
     while (1)
