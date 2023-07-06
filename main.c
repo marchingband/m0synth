@@ -371,7 +371,7 @@ int main(void)
 {
     board_init();
     printf("Timer basic test\n");
-    vTaskStartScheduler();
+    // vTaskStartScheduler();
 
     /* timer clk = XCLK/(div + 1 )*/
     struct bflb_timer_config_s cfg0;
