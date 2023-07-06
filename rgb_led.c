@@ -22,6 +22,8 @@ uint8_t rgb_sig[NUM_BIT_BITS] = {0};
 
 size_t p = 0;
 
+int test = 0;
+
 void rgb_led_init(){
     timer0 = bflb_device_get_by_name("timer0");
 
@@ -45,27 +47,37 @@ void timer0_isr(int irq, void *arg)
     bool status = bflb_timer_get_compint_status(timer0, RGB_TIMER_COMP_ID);
     if (status) {
         bflb_timer_compint_clear(timer0, RGB_TIMER_COMP_ID);
-        if(p < NUM_BIT_BITS)
+        // if(p < NUM_BIT_BITS)
+        // {
+        //     uint32_t val = rgb_sig[p];
+        //     p += 1;
+        //     if(val == 0)
+        //     {
+        //         bflb_gpio_reset(gpio, LED_GPIO);
+        //     }
+        //     else
+        //     {
+        //         bflb_gpio_set(gpio, LED_GPIO);
+        //     }
+        // }
+        // else
+        // {
+        //     p = 0;
+        //     bflb_timer_stop(timer0);
+        //     bflb_irq_disable(timer0->irq_num);
+        //     bflb_gpio_reset(gpio, LED_GPIO);
+        //     bflb_mtimer_delay_us(90);
+        //     printf("done\n\n");
+        // }
+        if(test == 0)
         {
-            uint32_t val = rgb_sig[p];
-            p += 1;
-            if(val == 0)
-            {
-                bflb_gpio_reset(gpio, LED_GPIO);
-            }
-            else
-            {
-                bflb_gpio_set(gpio, LED_GPIO);
-            }
+            bflb_gpio_reset(gpio, LED_GPIO);
+            test = 1;
         }
         else
         {
-            p = 0;
-            bflb_timer_stop(timer0);
-            bflb_irq_disable(timer0->irq_num);
-            bflb_gpio_reset(gpio, LED_GPIO);
-            bflb_mtimer_delay_us(90);
-            printf("done\n\n");
+            bflb_gpio_set(gpio, LED_GPIO);
+            test = 0;
         }
     }
 }

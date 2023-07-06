@@ -301,7 +301,7 @@ int main(void)
     // // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
     // // int cnt = 0;
     // // bool bench = true;
-
+    rgb_led_white();
     
     while (1)
     {
@@ -316,6 +316,6 @@ int main(void)
         // adc_read();
         // handle_pots();
         bflb_mtimer_delay_ms(1000);
-        rgb_led_white();
+        // rgb_led_white();
     }
 }
