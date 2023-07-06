@@ -326,25 +326,25 @@
 
 #define TEST_TIMER_COMP_ID TIMER_COMP_ID_2
 
-struct bflb_device_s *_timer0;
+struct bflb_device_s *timer0;
 struct bflb_device_s *timer1;
 
-void __timer0_isr(int irq, void *arg)
+void timer0_isr(int irq, void *arg)
 {
-    bool status = bflb_timer_get_compint_status(_timer0, TIMER_COMP_ID_0);
+    bool status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_0);
     if (status) {
-        bflb_timer_compint_clear(_timer0, TIMER_COMP_ID_0);
-        printf("_timer0 comp0 trigger\r\n");
+        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_0);
+        printf("timer0 comp0 trigger\r\n");
     }
-    status = bflb_timer_get_compint_status(_timer0, TIMER_COMP_ID_1);
+    status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_1);
     if (status) {
-        bflb_timer_compint_clear(_timer0, TIMER_COMP_ID_1);
-        printf("_timer0 comp1 trigger\r\n");
+        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_1);
+        printf("timer0 comp1 trigger\r\n");
     }
-    status = bflb_timer_get_compint_status(_timer0, TIMER_COMP_ID_2);
+    status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_2);
     if (status) {
-        bflb_timer_compint_clear(_timer0, TIMER_COMP_ID_2);
-        printf("_timer0 comp2 trigger\r\n");
+        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_2);
+        printf("timer0 comp2 trigger\r\n");
     }
 }
 
@@ -371,7 +371,6 @@ int main(void)
 {
     board_init();
     printf("Timer basic test\n");
-    // vTaskStartScheduler();
 
     /* timer clk = XCLK/(div + 1 )*/
     struct bflb_timer_config_s cfg0;
@@ -394,20 +393,20 @@ int main(void)
     cfg1.comp2_val = 2500000; /* match value 2 */
     cfg1.preload_val = 0;    /* preload value */
 
-    _timer0 = bflb_device_get_by_name("timer0");
+    timer0 = bflb_device_get_by_name("timer0");
     timer1 = bflb_device_get_by_name("timer1");
 
     /* Timer init with default configuration */
-    bflb_timer_init(_timer0, &cfg0);
+    bflb_timer_init(timer0, &cfg0);
     bflb_timer_init(timer1, &cfg1);
 
-    bflb_irq_attach(_timer0->irq_num, __timer0_isr, NULL);
+    bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
     bflb_irq_attach(timer1->irq_num, timer1_isr, NULL);
-    bflb_irq_enable(_timer0->irq_num);
+    bflb_irq_enable(timer0->irq_num);
     bflb_irq_enable(timer1->irq_num);
 
     /* Enable timer */
-    bflb_timer_start(_timer0);
+    bflb_timer_start(timer0);
     bflb_timer_start(timer1);
 
     printf("case success.\r\n");
