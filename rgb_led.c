@@ -33,6 +33,8 @@ void rgb_led_init(){
     cfg.clock_div = RGB_CLOCK_DIV;
     cfg.trigger_comp_id = RGB_TIMER_COMP_ID;
     cfg.comp0_val = 1000000;
+    cfg.comp1_val = 2000000;
+    cfg.comp2_val = 3000000;
     cfg.preload_val = 0;
     bflb_timer_init(timer0, &cfg);
 
@@ -69,16 +71,16 @@ void timer0_isr(int irq, void *arg)
         //     bflb_mtimer_delay_us(90);
         //     printf("done\n\n");
         // }
-        if(test == 0)
-        {
-            bflb_gpio_reset(gpio, LED_GPIO);
-            test = 1;
-        }
-        else
-        {
-            bflb_gpio_set(gpio, LED_GPIO);
-            test = 0;
-        }
+        // if(test == 0)
+        // {
+        //     bflb_gpio_reset(gpio, LED_GPIO);
+        //     test = 1;
+        // }
+        // else
+        // {
+        //     bflb_gpio_set(gpio, LED_GPIO);
+        //     test = 0;
+        // }
     }
 }
 
