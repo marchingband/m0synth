@@ -24,7 +24,7 @@ int test = 0;
 
 void rgb_led_init(){
     struct bflb_timer_config_s cfg;
-    timer0 = bflb_device_get_by_name("timer0");
+    timer0 = bflb_device_get_by_name("timer1");
 
     /* timer clk = clock_source/(div + 1)*/
     cfg.counter_mode = TIMER_COUNTER_MODE_PROLOAD;
@@ -47,7 +47,7 @@ void timer0_isr(int irq, void *arg)
     bool status = bflb_timer_get_compint_status(timer0, RGB_TIMER_COMP_ID);
     if (status) {
         bflb_timer_compint_clear(timer0, RGB_TIMER_COMP_ID);
-        printf("isr");
+        // printf("isr");
         // if(p < NUM_BIT_BITS)
         // {
         //     uint32_t val = rgb_sig[p];
