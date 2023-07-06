@@ -118,8 +118,8 @@ void rgb_send_color(void){
 }
 
 void rgb_led_white(){
-    // printf("send white\n");
-    // color = (white[0]) | (white[1] << 8) | (white[2] << 16);
+    printf("send white\n");
+    color = (white[0]) | (white[1] << 8) | (white[2] << 16);
     rgb_send_color();
 }
 
