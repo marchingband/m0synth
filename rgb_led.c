@@ -14,8 +14,6 @@
 struct bflb_device_s *timer0;
 struct bflb_device_s *gpio;
 
-struct bflb_timer_config_s cfg;
-
 uint8_t white[3] = {127, 127, 127};
 uint32_t color = 0;
 uint8_t rgb_sig[NUM_BIT_BITS] = {0};
@@ -25,6 +23,7 @@ size_t p = 0;
 int test = 0;
 
 void rgb_led_init(){
+    struct bflb_timer_config_s cfg;
     timer0 = bflb_device_get_by_name("timer0");
 
     /* timer clk = clock_source/(div + 1)*/
