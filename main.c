@@ -16,7 +16,7 @@
 // #include "bflb_core.h"
 
 // #include "usbh_core.h"
-// #include <FreeRTOS.h>
+#include <FreeRTOS.h>
 
 // #include "rgb_led.h"
 
@@ -371,6 +371,7 @@ int main(void)
 {
     board_init();
     printf("Timer basic test\n");
+    vTaskStartScheduler();
 
     /* timer clk = XCLK/(div + 1 )*/
     struct bflb_timer_config_s cfg0;
