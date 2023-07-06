@@ -397,16 +397,16 @@ int main(void)
     timer1 = bflb_device_get_by_name("timer1");
 
     /* Timer init with default configuration */
-    bflb_timer_init(timer0, &cfg0);
+    // bflb_timer_init(timer0, &cfg0);
     bflb_timer_init(timer1, &cfg1);
 
-    bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
+    // bflb_irq_attach(timer0->irq_num, timer0_isr, NULL);
     bflb_irq_attach(timer1->irq_num, timer1_isr, NULL);
-    bflb_irq_enable(timer0->irq_num);
+    // bflb_irq_enable(timer0->irq_num);
     bflb_irq_enable(timer1->irq_num);
 
     /* Enable timer */
-    bflb_timer_start(timer0);
+    // bflb_timer_start(timer0);
     bflb_timer_start(timer1);
 
     printf("case success.\r\n");
