@@ -29,7 +29,7 @@ void rgb_led_init(){
 
     /* timer clk = clock_source/(div + 1)*/
     cfg.counter_mode = TIMER_COUNTER_MODE_PROLOAD;
-    cfg.clock_source = TIMER_CLKSRC_NO;
+    cfg.clock_source = TIMER_CLKSRC_XTAL;
     cfg.clock_div = RGB_CLOCK_DIV;
     cfg.trigger_comp_id = RGB_TIMER_COMP_ID;
     cfg.comp0_val = 1000000;
