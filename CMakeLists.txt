@@ -10,7 +10,8 @@ target_sources(app PRIVATE
     midi.c
     midiXparser.c
     dsp.c
-
+    usb.c
+    rgb_led.c
 )
 
 sdk_set_main_file(main.c)
