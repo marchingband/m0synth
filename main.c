@@ -333,12 +333,12 @@ void timer0_isr(int irq, void *arg)
 {
     bool status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_0);
     if (status) {
-        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_0);
+        // bflb_timer_compint_clear(timer0, TIMER_COMP_ID_0);
         printf("timer0 comp0 trigger\r\n");
     }
     status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_1);
     if (status) {
-        bflb_timer_compint_clear(timer0, TIMER_COMP_ID_1);
+        // bflb_timer_compint_clear(timer0, TIMER_COMP_ID_1);
         printf("timer0 comp1 trigger\r\n");
     }
     status = bflb_timer_get_compint_status(timer0, TIMER_COMP_ID_2);
