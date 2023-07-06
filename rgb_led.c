@@ -7,7 +7,7 @@
 #define RGB_CLOCK_DIV 39
 // #define RGB_CLOCK_DIV 14
 #define LED_GPIO GPIO_PIN_10
-#define RGB_TIMER_COMP_ID TIMER_COMP_ID_2
+#define RGB_TIMER_COMP_ID TIMER_COMP_ID_0
 
 #define NUM_BIT_BITS (24 * 3)
 
@@ -24,7 +24,7 @@ int test = 0;
 
 void rgb_led_init(){
     struct bflb_timer_config_s cfg;
-    timer0 = bflb_device_get_by_name("timer1");
+    timer0 = bflb_device_get_by_name("timer0");
 
     /* timer clk = clock_source/(div + 1)*/
     cfg.counter_mode = TIMER_COUNTER_MODE_PROLOAD;
@@ -32,14 +32,14 @@ void rgb_led_init(){
     cfg.clock_div = RGB_CLOCK_DIV;
     cfg.trigger_comp_id = RGB_TIMER_COMP_ID;
     cfg.comp0_val = 1000000;
-    cfg.comp1_val = 2000000;
-    cfg.comp2_val = 3000000;
+    // cfg.comp1_val = 2000000;
+    // cfg.comp2_val = 3000000;
     cfg.preload_val = 0;
     bflb_timer_init(timer0, &cfg);
 
-    // gpio = bflb_device_get_by_name("gpio");
-    // bflb_gpio_init(gpio, LED_GPIO, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
-    // bflb_gpio_reset(gpio, LED_GPIO);
+    gpio = bflb_device_get_by_name("gpio");
+    bflb_gpio_init(gpio, LED_GPIO, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
+    bflb_gpio_reset(gpio, LED_GPIO);
 }
 
 void timer0_isr(int irq, void *arg)
@@ -70,16 +70,16 @@ void timer0_isr(int irq, void *arg)
         //     bflb_mtimer_delay_us(90);
         //     printf("done\n\n");
         // }
-        // if(test == 0)
-        // {
-        //     bflb_gpio_reset(gpio, LED_GPIO);
-        //     test = 1;
-        // }
-        // else
-        // {
-        //     bflb_gpio_set(gpio, LED_GPIO);
-        //     test = 0;
-        // }
+        if(test == 0)
+        {
+            bflb_gpio_reset(gpio, LED_GPIO);
+            test = 1;
+        }
+        else
+        {
+            bflb_gpio_set(gpio, LED_GPIO);
+            test = 0;
+        }
     }
 }
 
