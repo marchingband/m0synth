@@ -47,7 +47,7 @@ void timer0_isr(int irq, void *arg)
     bool status = bflb_timer_get_compint_status(timer0, RGB_TIMER_COMP_ID);
     if (status) {
         bflb_timer_compint_clear(timer0, RGB_TIMER_COMP_ID);
-        // printf("isr");
+        printf("isr");
         // if(p < NUM_BIT_BITS)
         // {
         //     uint32_t val = rgb_sig[p];
