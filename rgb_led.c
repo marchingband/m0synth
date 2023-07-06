@@ -31,7 +31,7 @@ void rgb_led_init(){
     cfg.clock_source = TIMER_CLKSRC_XTAL;
     cfg.clock_div = RGB_CLOCK_DIV;
     cfg.trigger_comp_id = RGB_TIMER_COMP_ID;
-    cfg.comp0_val = 13;
+    cfg.comp0_val = 14;
     // cfg.comp1_val = 2000000;
     // cfg.comp2_val = 3000000;
     cfg.preload_val = 0;
@@ -48,38 +48,38 @@ void timer0_isr(int irq, void *arg)
     if (status) {
         bflb_timer_compint_clear(timer0, RGB_TIMER_COMP_ID);
         // printf("isr");
-        if(p < NUM_BIT_BITS)
-        {
-            uint32_t val = rgb_sig[p];
-            p += 1;
-            if(val == 0)
-            {
-                bflb_gpio_reset(gpio, LED_GPIO);
-            }
-            else
-            {
-                bflb_gpio_set(gpio, LED_GPIO);
-            }
-        }
-        else
-        {
-            p = 0;
-            bflb_timer_stop(timer0);
-            bflb_irq_disable(timer0->irq_num);
-            bflb_gpio_reset(gpio, LED_GPIO);
-            bflb_mtimer_delay_us(90);
-            printf("done\n\n");
-        }
-        // if(test == 0)
+        // if(p < NUM_BIT_BITS)
         // {
-        //     bflb_gpio_reset(gpio, LED_GPIO);
-        //     test = 1;
+        //     uint32_t val = rgb_sig[p];
+        //     p += 1;
+        //     if(val == 0)
+        //     {
+        //         bflb_gpio_reset(gpio, LED_GPIO);
+        //     }
+        //     else
+        //     {
+        //         bflb_gpio_set(gpio, LED_GPIO);
+        //     }
         // }
         // else
         // {
-        //     bflb_gpio_set(gpio, LED_GPIO);
-        //     test = 0;
+        //     p = 0;
+        //     bflb_timer_stop(timer0);
+        //     bflb_irq_disable(timer0->irq_num);
+        //     bflb_gpio_reset(gpio, LED_GPIO);
+        //     bflb_mtimer_delay_us(90);
+        //     printf("done\n\n");
         // }
+        if(test == 0)
+        {
+            bflb_gpio_reset(gpio, LED_GPIO);
+            test = 1;
+        }
+        else
+        {
+            bflb_gpio_set(gpio, LED_GPIO);
+            test = 0;
+        }
     }
 }
 
