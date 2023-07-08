@@ -314,7 +314,7 @@ int main(void)
     // // int cnt = 0;
     // // bool bench = true;
     // rgb_led_white();
-    vTaskStartScheduler();
+    // vTaskStartScheduler();
     
     while (1)
     {
