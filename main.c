@@ -298,7 +298,7 @@ static void console_init()
     struct bflb_uart_config_s cfg;
     cfg.baudrate = 3200000;
     cfg.data_bits = UART_DATA_BITS_7;
-    cfg.stop_bits = UART_STOP_BITS_0_5;
+    cfg.stop_bits = UART_STOP_BITS_1;
     cfg.parity = UART_PARITY_NONE;
     cfg.flow_ctrl = 0;
     cfg.tx_fifo_threshold = 7;
