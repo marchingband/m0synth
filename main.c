@@ -329,7 +329,7 @@ int main(void)
         // adc_read();
         // handle_pots();
         bflb_mtimer_delay_ms(500);
-        printf("testing    %s   tada", led_msg);
+        printf("%s", led_msg);
         // rgb_led_white();
     }
 }
