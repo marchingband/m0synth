@@ -315,6 +315,7 @@ int main(void)
     // // bool bench = true;
     // rgb_led_white();
     // vTaskStartScheduler();
+    struct bflb_device_s *gpio = bflb_device_get_by_name("gpio");;
     
     while (1)
     {
@@ -329,13 +330,10 @@ int main(void)
         // adc_read();
         // handle_pots();
         // bflb_mtimer_delay_ms(500);
-        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        // printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
         printf("%c%c%c%c%c%c%c%c%c%c", led_msg[0],led_msg[1],led_msg[2],led_msg[3],led_msg[4],led_msg[5],led_msg[6],led_msg[7],led_msg[8],led_msg[9]);
-        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        bflb_gpio_reset(gpio, GPIO_PIN_21);
+        bflb_mtimer_delay_ms(1);
         // rgb_led_white();
     }
 }
