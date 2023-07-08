@@ -362,7 +362,13 @@ int main(void)
         bflb_mtimer_delay_us(5);
         bflb_gpio_init(gpio, GPIO_PIN_21, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
         bflb_gpio_reset(gpio, GPIO_PIN_21);
-        bflb_mtimer_delay_ms(1);
+        bflb_mtimer_delay_ms(500);
+        console_init();
+        printf("%c%c%c%c%c%c%c%c%c%c", 0,0,0,0,0,0,0,0,0,0);
+        bflb_mtimer_delay_us(5);
+        bflb_gpio_init(gpio, GPIO_PIN_21, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
+        bflb_gpio_reset(gpio, GPIO_PIN_21);
+        bflb_mtimer_delay_ms(500);
         console_init();
         // bflb_mtimer_delay_ms(10);
         // rgb_led_white();
