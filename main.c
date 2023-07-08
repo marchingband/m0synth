@@ -296,9 +296,9 @@ static void console_init()
     bflb_gpio_uart_init(gpio, GPIO_PIN_22, GPIO_UART_FUNC_UART0_RX);
 
     struct bflb_uart_config_s cfg;
-    cfg.baudrate = 3000000;
-    cfg.data_bits = UART_DATA_BITS_8;
-    cfg.stop_bits = UART_STOP_BITS_1;
+    cfg.baudrate = 3200000;
+    cfg.data_bits = UART_DATA_BITS_6;
+    cfg.stop_bits = UART_STOP_BITS_0_5;
     cfg.parity = UART_PARITY_NONE;
     cfg.flow_ctrl = 0;
     cfg.tx_fifo_threshold = 7;
