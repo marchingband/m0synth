@@ -272,6 +272,19 @@ char led_msg[10] = {
     0b0000000
 };
 
+char led_msg2[10] = {
+    0b0000000,
+    0b0100100,
+    0b0100100,
+    0b0100100,
+    0b0100100,
+    0b0100100,
+    0b0100100,
+    0b0100100,
+    0b0100100,
+    0b0000000
+};
+
 static struct bflb_device_s *uart0;
 
 static void console_init()
@@ -364,7 +377,7 @@ int main(void)
         bflb_gpio_reset(gpio, GPIO_PIN_21);
         bflb_mtimer_delay_ms(500);
         console_init();
-        printf("%c%c%c%c%c%c%c%c%c%c", 0,0,0,0,0,0,0,0,0,0);
+        printf("%c%c%c%c%c%c%c%c%c%c", led_msg2[0],led_msg2[1],led_msg2[2],led_msg2[3],led_msg2[4],led_msg2[5],led_msg2[6],led_msg2[7],led_msg2[8],led_msg2[9]);
         bflb_mtimer_delay_us(5);
         bflb_gpio_init(gpio, GPIO_PIN_21, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
         bflb_gpio_reset(gpio, GPIO_PIN_21);
