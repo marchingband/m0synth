@@ -272,6 +272,32 @@ char led_msg[10] = {
     0b0000000
 };
 
+static struct bflb_device_s *uart0;
+
+static void console_init()
+{
+    struct bflb_device_s *gpio;
+
+    gpio = bflb_device_get_by_name("gpio");
+    bflb_gpio_uart_init(gpio, GPIO_PIN_21, GPIO_UART_FUNC_UART0_TX);
+    bflb_gpio_uart_init(gpio, GPIO_PIN_22, GPIO_UART_FUNC_UART0_RX);
+
+    struct bflb_uart_config_s cfg;
+    cfg.baudrate = 3000000;
+    cfg.data_bits = UART_DATA_BITS_8;
+    cfg.stop_bits = UART_STOP_BITS_1;
+    cfg.parity = UART_PARITY_NONE;
+    cfg.flow_ctrl = 0;
+    cfg.tx_fifo_threshold = 7;
+    cfg.rx_fifo_threshold = 7;
+
+    uart0 = bflb_device_get_by_name("uart0");
+
+    bflb_uart_init(uart0, &cfg);
+    bflb_uart_set_console(uart0);
+}
+
+
 int main(void)
 {
     /* board init */
