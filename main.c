@@ -258,7 +258,7 @@ static void handle_pots(void)
 
 /* MAIN */
 
-char msg[10] = {
+char led_msg[10] = {
     0b0000000,
     0b0110110,
     0b0110110,
@@ -329,7 +329,7 @@ int main(void)
         // adc_read();
         // handle_pots();
         bflb_mtimer_delay_ms(500);
-        printf("%s", msg);
+        printf("%s", led_msg);
         // rgb_led_white();
     }
 }
