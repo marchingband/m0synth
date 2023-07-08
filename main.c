@@ -372,13 +372,13 @@ int main(void)
         // bflb_mtimer_delay_ms(500);
         // printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
         printf("%c%c%c%c%c%c%c%c%c%c", led_msg[0],led_msg[1],led_msg[2],led_msg[3],led_msg[4],led_msg[5],led_msg[6],led_msg[7],led_msg[8],led_msg[9]);
-        bflb_mtimer_delay_us(16);
+        bflb_mtimer_delay_us(24);
         bflb_gpio_init(gpio, GPIO_PIN_21, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
         bflb_gpio_reset(gpio, GPIO_PIN_21);
         bflb_mtimer_delay_ms(500);
         console_init();
         printf("%c%c%c%c%c%c%c%c%c%c", led_msg2[0],led_msg2[1],led_msg2[2],led_msg2[3],led_msg2[4],led_msg2[5],led_msg2[6],led_msg2[7],led_msg2[8],led_msg2[9]);
-        bflb_mtimer_delay_us(16);
+        bflb_mtimer_delay_us(24);
         bflb_gpio_init(gpio, GPIO_PIN_21, GPIO_OUTPUT | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_0);
         bflb_gpio_reset(gpio, GPIO_PIN_21);
         bflb_mtimer_delay_ms(500);
