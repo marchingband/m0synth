@@ -258,13 +258,26 @@ static void handle_pots(void)
 
 /* MAIN */
 
+char msg[10] = {
+    0b0000000,
+    0b0110110,
+    0b0110110,
+    0b0110110,
+    0b0110110,
+    0b0110110,
+    0b0110110,
+    0b0110110,
+    0b0110110
+    0b0000000,
+};
+
 int main(void)
 {
     /* board init */
     board_init();
 
     /* initialize rgb driver */
-    rgb_led_init();
+    // rgb_led_init();
 
     // /* start usb */
     // printf("Starting usb host task...\r\n");
@@ -315,7 +328,8 @@ int main(void)
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
-        bflb_mtimer_delay_ms(1000);
+        bflb_mtimer_delay_ms(500);
+        printf("%s", msg);
         // rgb_led_white();
     }
 }
