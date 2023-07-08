@@ -328,8 +328,14 @@ int main(void)
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
-        bflb_mtimer_delay_ms(500);
+        // bflb_mtimer_delay_ms(500);
+        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
         printf("%c%c%c%c%c%c%c%c%c%c", led_msg[0],led_msg[1],led_msg[2],led_msg[3],led_msg[4],led_msg[5],led_msg[6],led_msg[7],led_msg[8],led_msg[9]);
+        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+        printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
         // rgb_led_white();
     }
 }
