@@ -259,7 +259,7 @@ static void handle_pots(void)
 
 /* MAIN */
 
-char led_msg[8] = {
+char led_msg[16] = {
     0b0110110,
     0b0110110,
     0b0110110,
@@ -278,7 +278,7 @@ char led_msg[8] = {
     0b0000110,
 };
 
-char led_msg2[8] = {
+char led_msg2[16] = {
     0b0010010,
     0b0010010,
     0b0010010,
