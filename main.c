@@ -346,7 +346,7 @@ void i2s_init(void)
     struct bflb_device_s *dma0_ch0;
     static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[256] __ALIGNED(4);
     static volatile uint8_t dma_tc_flag0 = 0;
-    for (i = 0; i < 256; i++) {
+    for (int i = 0; i < 256; i++) {
         tx_buffer[i] = i % 2 ? 10000 : 50000;
     }
     struct bflb_i2s_config_s i2s_cfg = {
