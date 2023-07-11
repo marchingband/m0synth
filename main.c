@@ -340,36 +340,36 @@ int main(void)
     board_init();
 
     /* initialize rgb driver */
-    // rgb_led_init();
+    rgb_led_init();
 
-    // /* start usb */
-    // printf("Starting usb host task...\r\n");
-    // usbh_initialize();
+    /* start usb */
+    printf("Starting usb host task...\r\n");
+    usbh_initialize();
 
-    // /* dsp init */
-    // dsp_init(BUF_SIZE);
+    /* dsp init */
+    dsp_init(BUF_SIZE);
 
-    // /* gpio init */
-    // audac_gpio_init();
+    /* gpio init */
+    audac_gpio_init();
 
-    // /* adc init */
-    // // adc_init();
+    /* adc init */
+    // adc_init();
 
-    // /* audac init */
-    // audac_init();
+    /* audac init */
+    audac_init();
 
-    // /* dma init */
-    // audac_dma_init();
-    // bflb_dma_channel_start(audac_dma_hd);
+    /* dma init */
+    audac_dma_init();
+    bflb_dma_channel_start(audac_dma_hd);
 
-    // /* audac start */
-    // bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
+    /* audac start */
+    bflb_audac_feature_control(audac_hd, AUDAC_CMD_PLAY_START, 0);
 
-    // /* uart midi */
-    // uart_receive_init();
+    /* uart midi */
+    uart_receive_init();
 
-    // /* usb midi host */
-    // usb_midi_start();
+    /* usb midi host */
+    usb_midi_start();
 
 
     // // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
@@ -377,7 +377,7 @@ int main(void)
     // // int cnt = 0;
     // // bool bench = true;
     // rgb_led_white();
-    // vTaskStartScheduler();
+    vTaskStartScheduler();
     
     while (1)
     {
@@ -391,9 +391,9 @@ int main(void)
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
-        printf("testing\n");
+        // printf("testing\n");
         bflb_mtimer_delay_ms(500);
-        gpio_sig_init();
+        // gpio_sig_init();
         // bflb_mtimer_delay_ms(200);
     }
 }
