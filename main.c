@@ -7,7 +7,6 @@
 #include "bflb_audac.h"
 #include "bflb_gpio.h"
 #include "bflb_dma.h"
-#include "bflb_gpio.h"
 #include "bflb_uart.h"
 
 #include "bl616_glb.h"
@@ -491,14 +490,16 @@ int main(void)
     /* usb midi host */
     usb_midi_start();
 
-    i2s_init();
+    // i2s_init();
+    rgb_led_init();
+    rgb_led_white();
+
 
 
     // // printf("uart is irq %d with prio %d\n", uart_int_num, uart_prio);
     // // printf("audac is irq %d with prio %d\n", audac_int_num, audac_prio);
     // // int cnt = 0;
     // // bool bench = true;
-    // rgb_led_white();
     vTaskStartScheduler();
     
     // gpio_sig_init();
