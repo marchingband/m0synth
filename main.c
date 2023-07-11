@@ -381,7 +381,7 @@ int main(void)
     
     while (1)
     {
-        // uint64_t start = bflb_mtimer_get_time_us();
+        // uint64_t start = bflb_mtimer_get_time_us();x
         // if(bench && (cnt++ > 100000)){
         //     print_bench();
         //     bench = false;
@@ -391,6 +391,7 @@ int main(void)
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
+        printf("testing\n");
         bflb_mtimer_delay_ms(500);
         gpio_sig_init();
         // bflb_mtimer_delay_ms(200);
