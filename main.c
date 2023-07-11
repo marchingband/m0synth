@@ -340,7 +340,7 @@ int main(void)
     board_init();
 
     /* initialize rgb driver */
-    rgb_led_init();
+    // rgb_led_init();
 
     /* start usb */
     printf("Starting usb host task...\r\n");
