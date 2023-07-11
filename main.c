@@ -340,10 +340,16 @@ void gpio_sig_init(void)
 
 }
 
+void dma0_ch1_isr(void *arg)
+{
+    dma_tc_flag0++;
+    printf("tc done\r\n");
+}
+
 void i2s_init(void)
 {
     struct bflb_device_s *i2s0;
-    struct bflb_device_s *dma0_ch0;
+    struct bflb_device_s *dma0_ch1;
     static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[256] __ALIGNED(4);
     static volatile uint8_t dma_tc_flag0 = 0;
     for (int i = 0; i < 256; i++) {
@@ -390,17 +396,17 @@ void i2s_init(void)
     bflb_i2s_link_txdma(i2s0, true);
 
     printf("\n\ri2s dma test\n\r");
-    dma0_ch0 = bflb_device_get_by_name("dma0_ch0");
-    bflb_dma_channel_init(dma0_ch0, &tx_config);
-    bflb_dma_channel_irq_attach(dma0_ch0, dma0_ch0_isr, NULL);
+    dma0_ch1 = bflb_device_get_by_name("dma0_ch1");
+    bflb_dma_channel_init(dma0_ch1, &tx_config);
+    bflb_dma_channel_irq_attach(dma0_ch1, dma0_ch1_isr, NULL);
 
     tx_transfers[0].src_addr = (uint32_t)tx_buffer;
     tx_transfers[0].dst_addr = (uint32_t)DMA_ADDR_I2S_TDR;
     tx_transfers[0].nbytes = sizeof(tx_buffer);
 
-    uint32_t num = bflb_dma_channel_lli_reload(dma0_ch0, tx_llipool, 1, tx_transfers, 1);
-    bflb_dma_channel_lli_link_head(dma0_ch0, tx_llipool, num);
-    bflb_dma_channel_start(dma0_ch0);
+    uint32_t num = bflb_dma_channel_lli_reload(dma0_ch1, tx_llipool, 1, tx_transfers, 1);
+    bflb_dma_channel_lli_link_head(dma0_ch1, tx_llipool, num);
+    bflb_dma_channel_start(dma0_ch1);
 
     bflb_i2s_feature_control(i2s0, I2S_CMD_DATA_ENABLE, I2S_CMD_DATA_ENABLE_TX | I2S_CMD_DATA_ENABLE_RX);
     printf("\n\rtest end\n\r");
