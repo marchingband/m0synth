@@ -314,7 +314,7 @@ void gpio_sig_init(void)
         .gpioMode = GPIO_OUTPUT_VALUE_MODE,
         .pullType = GPIO_PULL_NONE,
         .drive = 1,
-        .smtCtrl = 1
+        .smtCtrl = 0
     };
     GLB_GPIO_Init(&gpioCfg);
 
@@ -325,8 +325,8 @@ void gpio_sig_init(void)
         .code0Phase = 0,       // GLB_GPIO_FIFO_PHASE_Type code0Phase; /*!< low or high level of code0 first send */
         .code1Phase = 1,       // GLB_GPIO_FIFO_PHASE_Type code1Phase; /*!< low or high level of code1 first send */
         .idle = 1,             // GLB_GPIO_FIFO_IDLE_Type idle;        /*!< the I/O idle level */
-        .fifoDmaThreshold = 0, // uint8_t fifoDmaThreshold;            /*!< FIFO threshold */
-        .fifoDmaEnable = 0,    // BL_Fun_Type fifoDmaEnable;           /*!< Enable or disable DMA of GPIO */
+        .fifoDmaThreshold = 1, // uint8_t fifoDmaThreshold;            /*!< FIFO threshold */
+        .fifoDmaEnable = 1,    // BL_Fun_Type fifoDmaEnable;           /*!< Enable or disable DMA of GPIO */
         .latch = 0             // GLB_GPIO_FIFO_LATCH_Type latch;      /*!< Write or set/clr GPIO level */
     };
     GLB_GPIO_Fifo_Init(&fifoCfg);
