@@ -19,9 +19,9 @@ static void i2s_gpio_init()
 
 static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[512] __ALIGNED(4);
 static volatile uint8_t dma_tc_flag0 = 0;
-struct bflb_device_s *dma0_ch1;
-struct bflb_dma_channel_lli_pool_s tx_llipool[1];
-struct bflb_dma_channel_lli_transfer_s tx_transfers[1];
+static struct bflb_device_s *dma0_ch1;
+static struct bflb_dma_channel_lli_pool_s tx_llipool[1];
+static struct bflb_dma_channel_lli_transfer_s tx_transfers[1];
 
 void dma0_ch1_isr(void *arg)
 {
