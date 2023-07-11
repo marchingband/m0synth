@@ -304,7 +304,7 @@ void gpio_sig_init(void)
     uint16_t data[16] = {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF};
 
     GLB_GPIO_Cfg_Type gpioCfg = {
-        .gpioPin = GLB_GPIO_PIN_10,
+        .gpioPin = GLB_GPIO_PIN_11,
         .gpioFun = GPIO_FUN_GPIO,
         .gpioMode = GPIO_DMA_OUTPUT_VALUE_MODE,
         .pullType = GPIO_PULL_DOWN,
