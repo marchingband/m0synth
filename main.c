@@ -259,69 +259,77 @@ static void handle_pots(void)
 
 /* MAIN */
 
-char led_msg[16] = {
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0110110,
-    0b0000110,
-};
+// char led_msg[16] = {
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0110110,
+//     0b0000110,
+// };
 
-char led_msg2[16] = {
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0010010,
-    0b0000010,
-};
+// char led_msg2[16] = {
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0010010,
+//     0b0000010,
+// };
 
-static struct bflb_device_s *uart0;
-
-static void console_init()
+void gpio_sig_init(void)
 {
-    struct bflb_device_s *gpio;
 
-    gpio = bflb_device_get_by_name("gpio");
-    bflb_gpio_uart_init(gpio, GPIO_PIN_21, GPIO_UART_FUNC_UART0_TX);
-    bflb_gpio_uart_init(gpio, GPIO_PIN_22, GPIO_UART_FUNC_UART0_RX);
+    uint16_t data[16] = {0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF, 0, 0xFF};
 
-    struct bflb_uart_config_s cfg;
-    cfg.baudrate = 3200000;
-    cfg.data_bits = UART_DATA_BITS_7;
-    cfg.stop_bits = UART_STOP_BITS_1;
-    cfg.parity = UART_PARITY_NONE;
-    cfg.flow_ctrl = 0;
-    cfg.tx_fifo_threshold = 7;
-    cfg.rx_fifo_threshold = 7;
+    GLB_GPIO_Cfg_Type gpioCfg = {
+        .gpioPin = GLB_GPIO_PIN_10,
+        .gpioFun = GPIO_FUN_GPIO,
+        .gpioMode = GPIO_DMA_OUTPUT_VALUE_MODE,
+        .pullType = GPIO_PULL_DOWN,
+        .drive = 1,
+        .smtCtrl = 1
+    };
+    GLB_GPIO_Init(&gpioCfg);
 
-    uart0 = bflb_device_get_by_name("uart0");
+    GLB_GPIO_FIFO_CFG_Type fifoCfg = {
+        .code0FirstTime = 1,   // uint8_t code0FirstTime;              /*!< The clock num of code0 first send */
+        .code1FirstTime = 5,   // uint8_t code1FirstTime;              /*!< The clock num of code1 first send */
+        .codeTotalTime = 10    // uint16_t codeTotalTime;              /*!< The total clock num of code0/1(high + low */
+        .code0Phase = 0,       // GLB_GPIO_FIFO_PHASE_Type code0Phase; /*!< low or high level of code0 first send */
+        .code1Phase = 1,       // GLB_GPIO_FIFO_PHASE_Type code1Phase; /*!< low or high level of code1 first send */
+        .code1Phase = 1,       // GLB_GPIO_FIFO_IDLE_Type idle;        /*!< the I/O idle level */
+        .fifoDmaThreshold = 0, // uint8_t fifoDmaThreshold;            /*!< FIFO threshold */
+        .fifoDmaEnable = 0,    // BL_Fun_Type fifoDmaEnable;           /*!< Enable or disable DMA of GPIO */
+        .latch = 0             // GLB_GPIO_FIFO_LATCH_Type latch;      /*!< Write or set/clr GPIO level */
+    };
+    GLB_GPIO_Fifo_Init(&fifoCfg);
 
-    bflb_uart_init(uart0, &cfg);
-    bflb_uart_set_console(uart0);
+    GLB_GPIO_Fifo_Push(data, 16);
+
+    GLB_GPIO_Fifo_Enable();
+
 }
-
 
 int main(void)
 {
@@ -367,7 +375,6 @@ int main(void)
     // // bool bench = true;
     // rgb_led_white();
     // vTaskStartScheduler();
-    struct bflb_device_s *gpio = bflb_device_get_by_name("gpio");;
     
     while (1)
     {
@@ -381,25 +388,9 @@ int main(void)
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
-        // bflb_mtimer_delay_ms(500);
-        // printf("%c%c%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
-        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", led_msg[0],led_msg[1],led_msg[2],led_msg[3],led_msg[4],led_msg[5],led_msg[6],led_msg[7],led_msg[8],led_msg[9],led_msg[10],led_msg[11],led_msg[12],led_msg[13],led_msg[14],led_msg[15]);
-        bflb_mtimer_delay_ms(200);
-        printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", led_msg2[0],led_msg2[1],led_msg2[2],led_msg2[3],led_msg2[4],led_msg2[5],led_msg2[6],led_msg2[7], led_msg2[8],led_msg2[9],led_msg2[10],led_msg2[11],led_msg2[12],led_msg2[13],led_msg2[14],led_msg2[15]);
-        bflb_mtimer_delay_ms(200);
-        // bflb_mtimer_delay_us(48);
-        // bflb_gpio_init(gpio, GPIO_PIN_21, GPIO_OUTPUT | GPIO_PULLDOWN | GPIO_SMT_EN | GPIO_DRV_0);
-        // bflb_gpio_reset(gpio, GPIO_PIN_21);
-        // bflb_mtimer_delay_ms(500);
-        // console_init();
-        // printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c", led_msg2[0],led_msg2[1],led_msg2[2],led_msg2[3],led_msg2[4],led_msg2[5],led_msg2[6],led_msg2[7], led_msg2[8],led_msg2[9],led_msg2[10],led_msg2[11],led_msg2[12],led_msg2[13],led_msg2[14],led_msg2[15]);
-        // bflb_mtimer_delay_us(48);
-        // bflb_gpio_init(gpio, GPIO_PIN_21, GPIO_OUTPUT | GPIO_PULLDOWN | GPIO_SMT_EN | GPIO_DRV_0);
-        // bflb_gpio_reset(gpio, GPIO_PIN_21);
-        // bflb_mtimer_delay_ms(500);
-        // console_init();
-        // bflb_mtimer_delay_ms(10);
-        // rgb_led_white();
+        bflb_mtimer_delay_ms(500);
+        gpio_sig_init();
+        // bflb_mtimer_delay_ms(200);
     }
 }
 
