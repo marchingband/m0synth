@@ -355,6 +355,10 @@ void i2s_init(void)
     for (int i = 0; i < 256; i++) {
         tx_buffer[i] = i % 2 ? 10000 : 50000;
     }
+    
+    struct bflb_dma_channel_lli_pool_s tx_llipool[1];
+    struct bflb_dma_channel_lli_transfer_s tx_transfers[1];
+
     struct bflb_i2s_config_s i2s_cfg = {
         .bclk_freq_hz = 32000 * 16 * 2, /* bclk = Sampling_rate * frame_width * channel_num */
         .role = I2S_ROLE_MASTER,
