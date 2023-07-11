@@ -362,6 +362,9 @@ void dma0_ch1_isr(void *arg)
 
 static void i2s_init(void)
 {    
+
+    i2s_gpio_init();
+
     struct bflb_device_s *i2s0;
     struct bflb_device_s *dma0_ch1;
 
@@ -408,7 +411,6 @@ static void i2s_init(void)
     };
 
     // board_i2s_gpio_init();
-    i2s_gpio_init();
 
     i2s0 = bflb_device_get_by_name("i2s0");
     bflb_i2s_init(i2s0, &i2s_cfg);
