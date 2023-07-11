@@ -424,10 +424,13 @@ int main(void)
         // printf("testing\n");
         // swgpio_send();
         bflb_mtimer_delay_ms(500);
+        printf("send blue\n");
         rgb_set_color(pix_blue);
         bflb_mtimer_delay_ms(500);
+        printf("send green\n");
         rgb_set_color(pix_green);
         bflb_mtimer_delay_ms(500);
+        printf("send red\n");
         rgb_set_color(pix_red);
         // bflb_mtimer_delay_ms(200);
     }

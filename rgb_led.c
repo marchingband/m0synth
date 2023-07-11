@@ -106,16 +106,16 @@ void rgb_led_init(){
     bflb_dma_channel_init(dma0_ch1, &tx_config);
     bflb_dma_channel_irq_attach(dma0_ch1, dma0_ch1_isr, NULL);
 
-    tx_transfers[0].src_addr = (uint32_t)tx_buffer;
-    tx_transfers[0].dst_addr = (uint32_t)DMA_ADDR_I2S_TDR;
-    tx_transfers[0].nbytes = sizeof(tx_buffer);
-
     bflb_i2s_feature_control(i2s0, I2S_CMD_DATA_ENABLE, I2S_CMD_DATA_ENABLE_TX | I2S_CMD_DATA_ENABLE_RX);
     printf("rgb setup done\n");
 }
 
 void i2s_send(void)
 {
+    tx_transfers[0].src_addr = (uint32_t)tx_buffer;
+    tx_transfers[0].dst_addr = (uint32_t)DMA_ADDR_I2S_TDR;
+    tx_transfers[0].nbytes = sizeof(tx_buffer);
+
     bflb_dma_channel_lli_reload(dma0_ch1, tx_llipool, 1, tx_transfers, 1);
     bflb_dma_channel_start(dma0_ch1);
 }
