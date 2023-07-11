@@ -328,9 +328,9 @@ void gpio_sig_init(void)
     };
     GLB_GPIO_Fifo_Init(&fifoCfg);
 
-    GLB_GPIO_Fifo_Push(data, 16);
+    // GLB_GPIO_Fifo_Push(data, 16);
 
-    GLB_GPIO_Fifo_Enable();
+    // GLB_GPIO_Fifo_Enable();
 
 }
 
