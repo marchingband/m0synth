@@ -298,11 +298,15 @@ static void handle_pots(void)
 //     0b0000010,
 // };
 
+uint16_t data[16] = {0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010};
+
+void swgpio_send(void)
+{
+    GLB_GPIO_Fifo_Push(data, 16);
+}
+
 void gpio_sig_init(void)
 {
-
-    uint16_t data[16] = {0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010, 0b1010101010101010};
-
     GLB_GPIO_Cfg_Type gpioCfg = {
         .gpioPin = GLB_GPIO_PIN_11,
         .gpioFun = GPIO_FUN_GPIO,
@@ -312,8 +316,6 @@ void gpio_sig_init(void)
         .smtCtrl = 1
     };
     GLB_GPIO_Init(&gpioCfg);
-
-    GLB_GPIO_Fifo_Push(data, 16);
 
     GLB_GPIO_FIFO_CFG_Type fifoCfg = {
         .code0FirstTime = 1,   // uint8_t code0FirstTime;              /*!< The clock num of code0 first send */
@@ -327,6 +329,8 @@ void gpio_sig_init(void)
         .latch = 0             // GLB_GPIO_FIFO_LATCH_Type latch;      /*!< Write or set/clr GPIO level */
     };
     GLB_GPIO_Fifo_Init(&fifoCfg);
+
+    
 
     // GLB_GPIO_Fifo_Push(data, 16);
 
@@ -379,6 +383,8 @@ int main(void)
     // rgb_led_white();
     // vTaskStartScheduler();
     
+    gpio_sig_init();
+
     while (1)
     {
         // uint64_t start = bflb_mtimer_get_time_us();x
@@ -391,9 +397,9 @@ int main(void)
         // printf("1000ms = %d us", (int)(bflb_mtimer_get_time_us() - start));
         // adc_read();
         // handle_pots();
-        // printf("testing\n");
+        printf("testing\n");
+        swgpio_send();
         bflb_mtimer_delay_ms(500);
-        gpio_sig_init();
         // bflb_mtimer_delay_ms(200);
     }
 }
