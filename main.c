@@ -313,6 +313,8 @@ void gpio_sig_init(void)
     };
     GLB_GPIO_Init(&gpioCfg);
 
+    GLB_GPIO_Fifo_Push(data, 16);
+
     GLB_GPIO_FIFO_CFG_Type fifoCfg = {
         .code0FirstTime = 1,   // uint8_t code0FirstTime;              /*!< The clock num of code0 first send */
         .code1FirstTime = 5,   // uint8_t code1FirstTime;              /*!< The clock num of code1 first send */
@@ -326,7 +328,7 @@ void gpio_sig_init(void)
     };
     GLB_GPIO_Fifo_Init(&fifoCfg);
 
-    GLB_GPIO_Fifo_Push(data, 16);
+    // GLB_GPIO_Fifo_Push(data, 16);
 
     GLB_GPIO_Fifo_Enable();
 
