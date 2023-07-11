@@ -351,7 +351,7 @@ static void i2s_gpio_init()
 }
 
 
-static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[256] __ALIGNED(4);
+static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[512] __ALIGNED(4);
 static volatile uint8_t dma_tc_flag0 = 0;
 
 void dma0_ch1_isr(void *arg)
@@ -368,8 +368,14 @@ static void i2s_init(void)
     struct bflb_device_s *i2s0;
     struct bflb_device_s *dma0_ch1;
 
-    for (int i = 0; i < 256; i++) {
+    int i = 0;
+
+    for (; i < 256; i++) {
         tx_buffer[i] = 0b1001001001001000;
+    }
+
+    for (; i < 512; i++) {
+        tx_buffer[i] = 0b1101101101101100;
     }
 
     struct bflb_dma_channel_lli_pool_s tx_llipool[1];
