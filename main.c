@@ -432,7 +432,7 @@ static void i2s_init(void)
     tx_transfers[0].nbytes = sizeof(tx_buffer);
 
     uint32_t num = bflb_dma_channel_lli_reload(dma0_ch1, tx_llipool, 1, tx_transfers, 1);
-    bflb_dma_channel_lli_link_head(dma0_ch1, tx_llipool, num);
+    // bflb_dma_channel_lli_link_head(dma0_ch1, tx_llipool, num);
     bflb_dma_channel_start(dma0_ch1);
 
     bflb_i2s_feature_control(i2s0, I2S_CMD_DATA_ENABLE, I2S_CMD_DATA_ENABLE_TX | I2S_CMD_DATA_ENABLE_RX);
