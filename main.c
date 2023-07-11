@@ -303,6 +303,7 @@ uint16_t data[16] = {0b1010101010101010, 0b1010101010101010, 0b1010101010101010,
 void swgpio_send(void)
 {
     GLB_GPIO_Fifo_Push(data, 16);
+    GLB_GPIO_Fifo_Enable();
 }
 
 void gpio_sig_init(void)
@@ -310,8 +311,8 @@ void gpio_sig_init(void)
     GLB_GPIO_Cfg_Type gpioCfg = {
         .gpioPin = GLB_GPIO_PIN_11,
         .gpioFun = GPIO_FUN_GPIO,
-        .gpioMode = GPIO_DMA_OUTPUT_VALUE_MODE,
-        .pullType = GPIO_PULL_DOWN,
+        .gpioMode = GPIO_OUTPUT_VALUE_MODE,
+        .pullType = GPIO_PULL_NONE,
         .drive = 1,
         .smtCtrl = 1
     };
