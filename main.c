@@ -340,6 +340,18 @@ void gpio_sig_init(void)
 
 }
 
+static void i2s_gpio_init()
+{
+    struct bflb_device_s *gpio;
+
+    gpio = bflb_device_get_by_name("gpio");
+    bflb_gpio_init(gpio, GPIO_PIN_18, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
+    bflb_gpio_init(gpio, GPIO_PIN_19, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
+    bflb_gpio_init(gpio, GPIO_PIN_16, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
+    bflb_gpio_init(gpio, GPIO_PIN_17, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
+}
+
+
 static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[256] __ALIGNED(4);
 static volatile uint8_t dma_tc_flag0 = 0;
 
@@ -349,8 +361,8 @@ void dma0_ch1_isr(void *arg)
     printf("tc done\r\n");
 }
 
-void i2s_init(void)
-{
+static void i2s_init(void)
+{    
     struct bflb_device_s *i2s0;
     struct bflb_device_s *dma0_ch1;
 
@@ -396,7 +408,9 @@ void i2s_init(void)
         .dst_width = DMA_DATA_WIDTH_16BIT,
     };
 
-    board_i2s_gpio_init();
+    // board_i2s_gpio_init();
+    i2s_gpio_init();
+
     i2s0 = bflb_device_get_by_name("i2s0");
     bflb_i2s_init(i2s0, &i2s_cfg);
     bflb_i2s_link_txdma(i2s0, true);
