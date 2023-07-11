@@ -3,9 +3,11 @@
 #include "bflb_dma.h"
 #include "bl616_glb_gpio.h"
 #include "bl616_irq.h"
-
-
 #include "board.h"
+#include "rgb_led.h"
+
+#define PIXEL_SIZE 12 // each colour takes 4 bytes
+#define LED_NUMBER 1
 
 static void i2s_gpio_init()
 {
@@ -17,7 +19,7 @@ static void i2s_gpio_init()
     bflb_gpio_init(gpio, GPIO_PIN_11, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
 }
 
-static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[512] __ALIGNED(4);
+static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[256] __ALIGNED(4);
 static volatile uint8_t dma_tc_flag0 = 0;
 static struct bflb_device_s *dma0_ch1;
 static struct bflb_dma_channel_lli_pool_s tx_llipool[1];
@@ -37,25 +39,25 @@ void rgb_led_init(){
 
     struct bflb_device_s *i2s0;
 
-    tx_buffer[0] = 0b1101101101101101;
-    tx_buffer[1] = 0b1011011011011011;
-    tx_buffer[2] = 0b0110110110110110;
-    tx_buffer[3] = 0b0110110110110110;
-    tx_buffer[4] = 0b0110110110000000;
+    // tx_buffer[0] = 0b1101101101101101;
+    // tx_buffer[1] = 0b1011011011011011;
+    // tx_buffer[2] = 0b0110110110110110;
+    // tx_buffer[3] = 0b0110110110110110;
+    // tx_buffer[4] = 0b0110110110000000;
     
-    for (int i=5; i < 256; i++) {
-        tx_buffer[i] = 0;
-    }
+    // for (int i=5; i < 256; i++) {
+    //     tx_buffer[i] = 0;
+    // }
 
-    tx_buffer[256] = 0b1001001001001001;
-    tx_buffer[257] = 0b0010010010010010;
-    tx_buffer[258] = 0b0100100100100100;
-    tx_buffer[259] = 0b1001001001001001;
-    tx_buffer[260] = 0b0010010000000000;
+    // tx_buffer[256] = 0b1001001001001001;
+    // tx_buffer[257] = 0b0010010010010010;
+    // tx_buffer[258] = 0b0100100100100100;
+    // tx_buffer[259] = 0b1001001001001001;
+    // tx_buffer[260] = 0b0010010000000000;
 
-    for (int i=261; i < 512; i++) {
-        tx_buffer[i] = 0;
-    }
+    // for (int i=261; i < 512; i++) {
+    //     tx_buffer[i] = 0;
+    // }
 
     struct bflb_i2s_config_s i2s_cfg = {
         .bclk_freq_hz = 100000 * 16 * 2, /* bclk = Sampling_rate * frame_width * channel_num */
@@ -118,9 +120,42 @@ void i2s_send(void)
     bflb_dma_channel_start(dma0_ch1);
 }
 
+static const uint16_t bitpatterns[4] = {0x88, 0x8e, 0xe8, 0xee};
+static uint8_t out_buffer[LED_NUMBER * PIXEL_SIZE] = {0};
 
-void rgb_set_color(void){
+void rgb_set_color(struct pixel_t *pixels){
+    memset(tx_buffer, 0, sizeof tx_buffer);
+    for (uint16_t i = 0; i < LED_NUMBER; i++) {
+        int loc = i * PIXEL_SIZE;
+
+        // out_buffer[loc] = bitpatterns[pixels[i].green >> 6 & 0x03];
+        // out_buffer[loc + 1] = bitpatterns[pixels[i].green >> 4 & 0x03];
+        // out_buffer[loc + 2] = bitpatterns[pixels[i].green >> 2 & 0x03];
+        // out_buffer[loc + 3] = bitpatterns[pixels[i].green & 0x03];
+
+        // out_buffer[loc + 4] = bitpatterns[pixels[i].red >> 6 & 0x03];
+        // out_buffer[loc + 5] = bitpatterns[pixels[i].red >> 4 & 0x03];
+        // out_buffer[loc + 6] = bitpatterns[pixels[i].red >> 2 & 0x03];
+        // out_buffer[loc + 7] = bitpatterns[pixels[i].red & 0x03];
+
+        // out_buffer[loc + 8] = bitpatterns[pixels[i].blue >> 6 & 0x03];
+        // out_buffer[loc + 9] = bitpatterns[pixels[i].blue >> 4 & 0x03];
+        // out_buffer[loc + 10] = bitpatterns[pixels[i].blue >> 2 & 0x03];
+        // out_buffer[loc + 11] = bitpatterns[pixels[i].blue & 0x03];
+
+        tx_buffer[loc] = bitpatterns[pixels[i].green >> 6 & 0x03] | (bitpatterns[pixels[i].green >> 4 & 0x03] >> 8);
+        tx_buffer[loc + 1] = bitpatterns[pixels[i].green >> 2 & 0x03] | (bitpatterns[pixels[i].green & 0x03] >> 8);
+
+        tx_buffer[loc + 2] = bitpatterns[pixels[i].red >> 6 & 0x03] | (bitpatterns[pixels[i].red >> 4 & 0x03] >> 8);
+        tx_buffer[loc + 3] = bitpatterns[pixels[i].red >> 2 & 0x03] | (bitpatterns[pixels[i].red & 0x03] >> 8);
+
+        tx_buffer[loc + 4] = bitpatterns[pixels[i].blue >> 6 & 0x03] | (bitpatterns[pixels[i].blue >> 4 & 0x03] >> 8);
+        tx_buffer[loc + 5] = bitpatterns[pixels[i].blue >> 2 & 0x03] | (bitpatterns[pixels[i].blue & 0x03] >> 8);
+    }
+    i2s_send();
 }
+
+
 
 void rgb_led_white(){
     i2s_send();
