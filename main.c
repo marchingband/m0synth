@@ -376,7 +376,7 @@ static void i2s_init(void)
     struct bflb_dma_channel_lli_transfer_s tx_transfers[1];
 
     struct bflb_i2s_config_s i2s_cfg = {
-        .bclk_freq_hz = 96000 * 16 * 2, /* bclk = Sampling_rate * frame_width * channel_num */
+        .bclk_freq_hz = 100000 * 16 * 2, /* bclk = Sampling_rate * frame_width * channel_num */
         .role = I2S_ROLE_MASTER,
         .format_mode = I2S_MODE_LEFT_JUSTIFIED,
         .channel_mode = I2S_CHANNEL_MODE_NUM_2,
