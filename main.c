@@ -344,10 +344,10 @@ static void i2s_gpio_init()
 {
     struct bflb_device_s *gpio;
     gpio = bflb_device_get_by_name("gpio");
-    bflb_gpio_init(gpio, GPIO_PIN_12, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
-    bflb_gpio_init(gpio, GPIO_PIN_13, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
     bflb_gpio_init(gpio, GPIO_PIN_16, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
     bflb_gpio_init(gpio, GPIO_PIN_17, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
+    bflb_gpio_init(gpio, GPIO_PIN_10, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
+    bflb_gpio_init(gpio, GPIO_PIN_11, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
 }
 
 
@@ -410,7 +410,7 @@ static void i2s_init(void)
         .dst_width = DMA_DATA_WIDTH_16BIT,
     };
 
-    // board_i2s_gpio_init();
+    board_i2s_gpio_init();
 
     i2s0 = bflb_device_get_by_name("i2s0");
     bflb_i2s_init(i2s0, &i2s_cfg);
