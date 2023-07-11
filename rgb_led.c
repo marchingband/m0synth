@@ -17,10 +17,11 @@ static void i2s_gpio_init()
     bflb_gpio_init(gpio, GPIO_PIN_11, GPIO_FUNC_I2S | GPIO_ALTERNATE | GPIO_PULLUP | GPIO_SMT_EN | GPIO_DRV_1);
 }
 
-
 static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[512] __ALIGNED(4);
 static volatile uint8_t dma_tc_flag0 = 0;
 struct bflb_device_s *dma0_ch1;
+struct bflb_dma_channel_lli_pool_s tx_llipool[1];
+struct bflb_dma_channel_lli_transfer_s tx_transfers[1];
 
 void dma0_ch1_isr(void *arg)
 {
@@ -31,6 +32,7 @@ void dma0_ch1_isr(void *arg)
 
 
 void rgb_led_init(){
+
     i2s_gpio_init();
 
     struct bflb_device_s *i2s0;
@@ -54,11 +56,6 @@ void rgb_led_init(){
     for (int i=261; i < 512; i++) {
         tx_buffer[i] = 0;
     }
-
-
-
-    struct bflb_dma_channel_lli_pool_s tx_llipool[1];
-    struct bflb_dma_channel_lli_transfer_s tx_transfers[1];
 
     struct bflb_i2s_config_s i2s_cfg = {
         .bclk_freq_hz = 100000 * 16 * 2, /* bclk = Sampling_rate * frame_width * channel_num */
@@ -96,7 +93,7 @@ void rgb_led_init(){
         .dst_width = DMA_DATA_WIDTH_16BIT,
     };
 
-    board_i2s_gpio_init();
+    // board_i2s_gpio_init();
 
     i2s0 = bflb_device_get_by_name("i2s0");
     bflb_i2s_init(i2s0, &i2s_cfg);
