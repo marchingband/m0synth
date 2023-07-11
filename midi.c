@@ -132,6 +132,7 @@ void *declare(UIGlue *uiInterface, float *p, const char* key, const char* val){
     else if(strcmp("gate", key) == 0) // its the gate
     {
         gate = p;
+        *gate = 1;
     }
     else if(strcmp("pitch_bend", key) == 0) // its the gate
     {
