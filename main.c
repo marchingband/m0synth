@@ -369,7 +369,7 @@ static void i2s_init(void)
     struct bflb_device_s *dma0_ch1;
 
     for (int i = 0; i < 256; i++) {
-        tx_buffer[i] = i * 100;
+        tx_buffer[i] = 0b1001001001001000;
     }
 
     struct bflb_dma_channel_lli_pool_s tx_llipool[1];
