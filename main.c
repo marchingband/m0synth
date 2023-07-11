@@ -353,11 +353,13 @@ static void i2s_gpio_init()
 
 static ATTR_NOCACHE_NOINIT_RAM_SECTION uint16_t tx_buffer[512] __ALIGNED(4);
 static volatile uint8_t dma_tc_flag0 = 0;
+struct bflb_device_s *dma0_ch1;
 
 void dma0_ch1_isr(void *arg)
 {
     dma_tc_flag0++;
     printf("tc done\r\n");
+    bflb_dma_channel_stop(dma0_ch1);
 }
 
 static void i2s_init(void)
@@ -366,7 +368,6 @@ static void i2s_init(void)
     i2s_gpio_init();
 
     struct bflb_device_s *i2s0;
-    struct bflb_device_s *dma0_ch1;
 
     int i = 0;
 
