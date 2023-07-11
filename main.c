@@ -316,10 +316,10 @@ void gpio_sig_init(void)
     GLB_GPIO_FIFO_CFG_Type fifoCfg = {
         .code0FirstTime = 1,   // uint8_t code0FirstTime;              /*!< The clock num of code0 first send */
         .code1FirstTime = 5,   // uint8_t code1FirstTime;              /*!< The clock num of code1 first send */
-        .codeTotalTime = 10    // uint16_t codeTotalTime;              /*!< The total clock num of code0/1(high + low */
+        .codeTotalTime = 10,   // uint16_t codeTotalTime;              /*!< The total clock num of code0/1(high + low */
         .code0Phase = 0,       // GLB_GPIO_FIFO_PHASE_Type code0Phase; /*!< low or high level of code0 first send */
         .code1Phase = 1,       // GLB_GPIO_FIFO_PHASE_Type code1Phase; /*!< low or high level of code1 first send */
-        .code1Phase = 1,       // GLB_GPIO_FIFO_IDLE_Type idle;        /*!< the I/O idle level */
+        .idle = 1,             // GLB_GPIO_FIFO_IDLE_Type idle;        /*!< the I/O idle level */
         .fifoDmaThreshold = 0, // uint8_t fifoDmaThreshold;            /*!< FIFO threshold */
         .fifoDmaEnable = 0,    // BL_Fun_Type fifoDmaEnable;           /*!< Enable or disable DMA of GPIO */
         .latch = 0             // GLB_GPIO_FIFO_LATCH_Type latch;      /*!< Write or set/clr GPIO level */
